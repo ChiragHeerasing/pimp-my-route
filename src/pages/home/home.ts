@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { MapPage } from '../map/map';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 declare var google;
 
 @Component({
@@ -11,9 +11,14 @@ declare var google;
 })
 export class HomePage {
 
-  currentLocationToggle: boolean = true;
-  destA: string;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  destinationForm: FormGroup;
+  currentLocationToggle: boolean = true;;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+    this.destinationForm = formBuilder.group({
+       destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
+   });
+
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MapPage');
@@ -24,6 +29,10 @@ export class HomePage {
   }
 
   getRoutes($event) {
-    this.navCtrl.push(MapPage, this.destA);
+    if (!this.destinationForm.valid){
+      alert("you fucked up!")
+    }else{
+      this.navCtrl.push(MapPage, this.destinationForm.value.destination);
+    }
   }
 }

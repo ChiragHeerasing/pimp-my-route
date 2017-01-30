@@ -17,7 +17,11 @@ export class MapPage {
     constructor(public navCtrl: NavController, public navParams: NavParams) {
 
       this.destA = this.navParams.data
-      console.log(this.destA);
+        Geolocation.getCurrentPosition().then((position) => {
+          console.log(this.destA, position.coords.latitude, position.coords.longitude);
+        },(err) => {
+          console.log(err);
+        });
     }
 
     ionViewDidLoad(){

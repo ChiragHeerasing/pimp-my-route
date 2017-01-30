@@ -1,7 +1,5 @@
 # pimp-my-route
 
-
-
 ## Installation
 
 * `git clone <repository-url>` this repository

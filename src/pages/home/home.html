@@ -33,14 +33,12 @@
     <ion-list-header>
       Destinations
     </ion-list-header>
-
-    <ion-item>
-      <ion-label floating>New Destination</ion-label>
-      <ion-input [(ngModel)]="destA"></ion-input>
-    </ion-item>
-
-
-
+    <form [formGroup]="destinationForm">
+      <ion-item>
+          <ion-label floating>New Destination</ion-label>
+          <ion-input formControlName="destination" type="text"></ion-input>
+      </ion-item>
+    </form>
   </ion-list>
   <button ion-button full (click)="getRoutes()"> Get Route </button>
 
