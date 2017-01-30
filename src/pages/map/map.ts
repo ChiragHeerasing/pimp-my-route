@@ -10,10 +10,15 @@ declare var google;
 })
 export class MapPage {
 
+    destA: string;
     @ViewChild('map') mapElement: ElementRef;
     map: any;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams) {}
+    constructor(public navCtrl: NavController, public navParams: NavParams) {
+
+      this.destA = this.navParams.data
+      console.log(this.destA);
+    }
 
     ionViewDidLoad(){
       this.loadMap();
