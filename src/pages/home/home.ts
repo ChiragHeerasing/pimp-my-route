@@ -1,7 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
-
+import { MapPage } from '../map/map';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 declare var google;
 
 @Component({
@@ -10,35 +11,28 @@ declare var google;
 })
 export class HomePage {
 
-  @ViewChild('map') mapElement: ElementRef;
-  map: any;
-
-  constructor(public navCtrl: NavController) {
+  destinationForm: FormGroup;
+  currentLocationToggle: boolean = true;;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+    this.destinationForm = formBuilder.group({
+       destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
+   });
 
   }
 
-  ionViewDidLoad(){
-    this.loadMap();
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad MapPage');
   }
 
-  loadMap(){
+  goToMap(){
+    this.navCtrl.push(MapPage);
+  }
 
-    Geolocation.getCurrentPosition().then((position) => {
-
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-      let mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-
-    }, (err) => {
-      console.log(err);
-    });
-
-
+  getRoutes($event) {
+    if (!this.destinationForm.valid){
+      alert("you fucked up!")
+    }else{
+      this.navCtrl.push(MapPage, this.destinationForm.value.destination);
+    }
   }
 }

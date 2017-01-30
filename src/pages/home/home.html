@@ -1,14 +1,45 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>
-      Map
+      PIMP MY ROUTE
     </ion-title>
     <ion-buttons end>
-      <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Add Marker</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <div #map id="map"></div>
+    <ion-list-header>
+      Origin
+    </ion-list-header>
+  <ion-list>
+    <ion-item>
+      <ion-toggle color="danger" [(ngModel)]="currentLocationToggle"></ion-toggle>
+      <ion-label>
+        Use current location
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="!currentLocationToggle">
+      <ion-label floating>Starting Location</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+
+
+
+
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      Destinations
+    </ion-list-header>
+    <form [formGroup]="destinationForm">
+      <ion-item>
+          <ion-label floating>New Destination</ion-label>
+          <ion-input formControlName="destination" type="text"></ion-input>
+      </ion-item>
+    </form>
+  </ion-list>
+  <button ion-button full (click)="getRoutes()"> Get Route </button>
+
 </ion-content>
