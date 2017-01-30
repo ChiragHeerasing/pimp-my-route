@@ -1,14 +1,70 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>
-      Map
+      Pimp My Route
     </ion-title>
     <ion-buttons end>
-      <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Add Marker</button>
+      <button  (click)="goToMap()">Go to map</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <div #map id="map"></div>
+    <ion-list-header>
+      Origin
+    </ion-list-header>
+  <ion-list>
+    <ion-item>
+      <ion-toggle color="danger" checked="true"></ion-toggle>
+      <ion-label>
+        Use current location
+      </ion-label>
+      <ion-icon name='body' item-left></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name='leaf' item-left></ion-icon>
+      Herbology
+      <ion-icon name='rose' item-right color="secondary"></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name='flask' item-left></ion-icon>
+      Potions
+      <ion-note item-right>
+      Poisonous
+      </ion-note>
+    </ion-item>
+
+
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      Destinations
+    </ion-list-header>
+
+    <ion-item>
+      Incantation
+      <ion-icon name='color-wand' item-left></ion-icon>
+      <ion-note item-right>Crucio!</ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-toggle checked="true"></ion-toggle>
+      <ion-label>
+        Quidditch Practice
+      </ion-label>
+      <ion-icon name='brush' item-left></ion-icon>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-icon name='wine' item-left></ion-icon>
+      Mead Drinking
+      <ion-note item-right>Yes please</ion-note>
+    </ion-item>
+
+
+  </ion-list>
+
 </ion-content>
