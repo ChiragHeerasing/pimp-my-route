@@ -55,7 +55,7 @@ export class MapPage {
     } // LOAD MAP
    calculateAndDisplayRoute(directionsService, directionsDisplay) {
         directionsService.route({
-          origin: this.origin,
+          origin: this.origin.toString(),
           destination: this.destA.toString(),
           travelMode: 'DRIVING'
         }, function(response, status) {
