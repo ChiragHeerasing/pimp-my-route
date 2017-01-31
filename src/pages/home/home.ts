@@ -13,6 +13,7 @@ declare var google;
   templateUrl: 'home.html'
 })
 export class HomePage {
+  latLng:string;
   address:any = {
       place: '',
       set: false,
@@ -102,6 +103,7 @@ export class HomePage {
               // populate
               // self.address.set = true;
               console.log('page > getPlaceDetail > details > ', self.placedetails);
+              self.latLng = self.placedetails.lat+","+self.placedetails.lng;
           }else{
               console.log('page > getPlaceDetail > status > ', status);
           }
@@ -126,7 +128,8 @@ export class HomePage {
       };
   }
   goToMap(){
-    this.navCtrl.push(MapPage);
+    console.log("passing data:", this.latLng)
+    this.navCtrl.push(MapPage, this.latLng);
   }
 
   test(){
@@ -134,6 +137,6 @@ export class HomePage {
   }
 
   getRoutes($event) {
-      this.navCtrl.push(MapPage, this.destinationForm.value.destination);
+      this.navCtrl.push(MapPage, this.latLng);
   }
 }
