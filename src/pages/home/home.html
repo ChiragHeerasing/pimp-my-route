@@ -4,7 +4,6 @@
       PIMP MY ROUTE
     </ion-title>
     <ion-buttons end>
-      <button (click)="test()" name="button">TEXT TEXTY</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -35,10 +34,9 @@
       Destinations
     </ion-list-header>
     <ion-item margin>
-        <ion-input type="text" placeholder="Pick an address"
-            (click)="showModal()"
-            [(ngModel)]="address.place">
-        </ion-input>
+        <input (click)="showModal()" type="text" placeholder="Pick an address" [(ngModel)]="address.place"> <!--Got to fix this -->
+        <ion-input (click)="showModal()" type="text" placeholder="Pick an address" [(ngModel)]="address.place"> </ion-input>
+
     </ion-item>
     <!-- <form [formGroup]="destinationForm">
       <ion-item>
