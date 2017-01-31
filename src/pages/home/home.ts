@@ -102,7 +102,7 @@ export class HomePage {
 
 
   getRoutes($event) {
-      console.log("passing data:", this.latLng)
-      this.navCtrl.push(MapPage, this.latLng);
+      console.log("passing data:", this.addressDestinations)
+      this.navCtrl.push(MapPage, this.addressDestinations);
   }
 }

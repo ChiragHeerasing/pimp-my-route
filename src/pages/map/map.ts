@@ -10,7 +10,8 @@ declare var google;
 })
 export class MapPage {
 
-    destA: string;
+    destA: any;
+    waypointsSent: any;
     @ViewChild('map') mapElement: ElementRef;
     map: any;
     directionsService: any;
@@ -19,7 +20,8 @@ export class MapPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-      this.destA = this.navParams.data
+      this.destA = this.navParams.data[this.navParams.data.length-1];
+      this.waypointsSent = this.navParams.data.slice(0, -1);
 
     }
 
@@ -46,16 +48,27 @@ export class MapPage {
 
     }
    calculateAndDisplayRoute(directionsService, directionsDisplay) {
-        directionsService.route({
-          origin: this.origin.toString(),
-          destination: this.destA.toString(),
-          travelMode: 'DRIVING'
-        }, function(response, status) {
-          if (status === 'OK') {
-            directionsDisplay.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
+     var waypts = [];
+
+    for (var i = 0; i < this.waypointsSent.length; i++) {
+      var tempObj= {
+       location: this.waypointsSent[i].latLng,
+       stopover: true
+      };
+      waypts.push(tempObj);
+    }
+
+      directionsService.route({
+        origin: this.origin.toString(),
+        destination: this.destA.latLng.toString(),
+        waypoints: waypts,
+        travelMode: 'DRIVING'
+      }, function(response, status) {
+        if (status === 'OK') {
+          directionsDisplay.setDirections(response);
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
       }
 }

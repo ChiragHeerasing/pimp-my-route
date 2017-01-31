@@ -19,8 +19,10 @@
     </ion-item>
 
     <ion-item *ngIf="!currentLocationToggle">
-      <ion-label floating>Starting Location</ion-label>
-      <ion-input></ion-input>
+      <button ion-button item-right (click)="showModal()">
+        <ion-icon name="add-circle"> </ion-icon>
+        Address
+      </button>
     </ion-item>
 
 
