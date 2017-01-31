@@ -13,6 +13,7 @@ declare var google;
   templateUrl: 'home.html'
 })
 export class HomePage {
+  addressDestinations = [];
   latLng:string;
   address:any = {
       place: '',
@@ -58,7 +59,7 @@ export class HomePage {
       this.reset();
       let modal = this.modalCtrl.create(ModalAutocompleteItems);
       modal.onDidDismiss(data => {
-        //   console.log('page > modal dismissed > data > ', data);
+          // console.log('page > modal dismissed > data > ', data);
           if(data){
               this.address.place = data.description;
               this.getPlaceDetail(data.place_id);
@@ -79,6 +80,12 @@ export class HomePage {
       function callback(place, status) {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
               self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
+              var addressObj = {
+                formatted_address: place.formatted_address,
+                latLng: self.latLng
+              };
+              self.addressDestinations.push(addressObj);
+              console.log(self.addressDestinations);
           }else{
             //   console.log('page > getPlaceDetail > status > ', status);
           }
