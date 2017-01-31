@@ -1,14 +1,17 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
+import { ViewController } from 'ionic-angular';
+
 declare var google;
+var places: any[]= [];
 
 
 @Component({
   selector: 'page-places',
   templateUrl: 'places.html'
 })
-export class PlacesPage {
+export class PlacesPage{
   map: any;
   infoWindow: any;
   service: any;
@@ -16,11 +19,12 @@ export class PlacesPage {
   @ViewChild('map') mapElement: ElementRef;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PlacesPage');
     this.loadMap();
+    places=[];
   }
     loadMap(){
 
@@ -45,6 +49,9 @@ export class PlacesPage {
 
   search(){
     this.performSearch();
+    if (places.length>0){
+      this.viewCtrl.dismiss(places);
+    }
   }
     performSearch() {
       let centerSfo = new google.maps.LatLng(37.7749295, -122.41941550000001);
@@ -61,8 +68,16 @@ export class PlacesPage {
     if (status !== google.maps.places.PlacesServiceStatus.OK) {
       console.error(status);
       return;
+    }else{
+      places = results.slice(0,5)
+      // this.viewCtrl.dismiss(places)
+
     }
-    console.log(results)
+  }
+
+
+  dismiss(){
+    this.viewCtrl.dismiss();
   }
 
 }

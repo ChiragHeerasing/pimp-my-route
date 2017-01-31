@@ -24,7 +24,9 @@ export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
   placedetails: any;
   destinationForm: FormGroup;
-  currentLocationToggle: boolean = true;;
+  currentLocationToggle: boolean = true;
+  places: any;
+
   constructor(private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
     this.destinationForm = formBuilder.group({
        destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
@@ -37,9 +39,7 @@ export class HomePage {
     this.loadMap();
   }
   loadMap(){
-
     Geolocation.getCurrentPosition().then((position) => {
-
       let latLng = new google.maps.LatLng(-34.9290, 138.6010);
       let mapOptions = {
         center: latLng,
@@ -47,12 +47,9 @@ export class HomePage {
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-
     }, (err) => {
       console.log(err);
     });
-
-
   }
 
   showModal() {
@@ -92,7 +89,15 @@ export class HomePage {
       }
   }
   goToPlaces(){
-    this.navCtrl.push(PlacesPage);
+    // this.reset();
+      let placesModal = this.modalCtrl.create(PlacesPage);
+      placesModal.onDidDismiss(data => {
+        //   console.log('page > placesModal dismissed > data > ', data);
+          if(data){
+              console.log("places data back",data);
+          }
+      })
+      this.navCtrl.push(placesModal);
   }
 
 
