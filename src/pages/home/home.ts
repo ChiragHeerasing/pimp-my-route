@@ -4,6 +4,7 @@ import { Geolocation } from 'ionic-native';
 import { MapPage } from '../map/map';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalAutocompleteItems } from '../modal-autocomplete-items/modal-autocomplete-items';
+import { PlacesPage } from '../places/places';
 
 declare var google;
 
@@ -82,6 +83,9 @@ export class HomePage {
             //   console.log('page > getPlaceDetail > status > ', status);
           }
       }
+  }
+  goToPlaces(){
+    this.navCtrl.push(PlacesPage);
   }
 
 

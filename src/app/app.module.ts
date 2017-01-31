@@ -5,6 +5,7 @@ import { HomePage } from '../pages/home/home';
 import { MapPage } from '../pages/map/map';
 import { PageGmapAutocomplete } from '../pages/page-gmap-autocomplete/page-gmap-autocomplete';
 import { ModalAutocompleteItems } from  '../pages/modal-autocomplete-items/modal-autocomplete-items';
+import { PlacesPage } from '../pages/places/places';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { ModalAutocompleteItems } from  '../pages/modal-autocomplete-items/modal
     HomePage,
     MapPage,
     PageGmapAutocomplete,
-    ModalAutocompleteItems
+    ModalAutocompleteItems,
+    PlacesPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -23,7 +25,8 @@ import { ModalAutocompleteItems } from  '../pages/modal-autocomplete-items/modal
     HomePage,
     MapPage,
     PageGmapAutocomplete,
-    ModalAutocompleteItems
+    ModalAutocompleteItems,
+    PlacesPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
