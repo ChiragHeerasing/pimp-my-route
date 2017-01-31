@@ -3,7 +3,6 @@ import { NavController, NavParams, ModalController} from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { MapPage } from '../map/map';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PageGmapAutocomplete } from '../page-gmap-autocomplete/page-gmap-autocomplete';
 import { ModalAutocompleteItems } from '../modal-autocomplete-items/modal-autocomplete-items';
 
 declare var google;
@@ -39,14 +38,12 @@ export class HomePage {
 
     Geolocation.getCurrentPosition().then((position) => {
 
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
+      let latLng = new google.maps.LatLng(-34.9290, 138.6010);
       let mapOptions = {
         center: latLng,
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
-
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
     }, (err) => {
@@ -60,14 +57,13 @@ export class HomePage {
       this.reset();
       let modal = this.modalCtrl.create(ModalAutocompleteItems);
       modal.onDidDismiss(data => {
-          console.log('page > modal dismissed > data > ', data);
+        //   console.log('page > modal dismissed > data > ', data);
           if(data){
               this.address.place = data.description;
-              // get details
               this.getPlaceDetail(data.place_id);
           }
       })
-      modal.present();
+      this.navCtrl.push(modal);
   }
   private reset() {
       this.address.place = '';
@@ -83,10 +79,12 @@ export class HomePage {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
               self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
           }else{
-              console.log('page > getPlaceDetail > status > ', status);
+            //   console.log('page > getPlaceDetail > status > ', status);
           }
       }
   }
+
+
   getRoutes($event) {
       console.log("passing data:", this.latLng)
       this.navCtrl.push(MapPage, this.latLng);
