@@ -3,9 +3,6 @@
     <ion-title>
       PIMP MY ROUTE
     </ion-title>
-    <ion-buttons end>
-      <button (click)="goToPlaces()">PLACES TMP</button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -30,22 +27,38 @@
 
 <div #map id="map"></div>
   </ion-list>
-  <ion-list>
-    <ion-list-header>
-      Destinations
-    </ion-list-header>
-    <ion-item margin>
-        <input (click)="showModal()" type="text" placeholder="Pick an address" [(ngModel)]="address.place"> <!--Got to fix this -->
-        <ion-input (click)="showModal()" type="text" placeholder="Pick an address" [(ngModel)]="address.place"> </ion-input>
 
+  <ion-list>
+    <ion-item>
+      Destinations
+        <button ion-button item-right (click)="goToPlaces()">
+          <ion-icon name="add-circle"> </ion-icon>
+          Place
+        </button>
+      <button ion-button item-right (click)="showModal()">
+        <ion-icon name="add-circle"> </ion-icon>
+        Address
+      </button>
     </ion-item>
+  </ion-list>
+
+  <ion-list *ngFor="let address of addressDestinations">
+    <ion-item>
+      {{address.formatted_address}}
+    </ion-item>
+  </ion-list>
+
+
+    <ion-item margin>
+    </ion-item>
+
     <!-- <form [formGroup]="destinationForm">
       <ion-item>
           <ion-label floating>New Destination</ion-label>
           <ion-input (click)="showAddressModal()" [(ngModel)]="address" formControlName="destination" type="text"></ion-input>
       </ion-item>
     </form> -->
-  </ion-list>
+
   <button ion-button full (click)="getRoutes()"> Get Route </button>
 
 </ion-content>

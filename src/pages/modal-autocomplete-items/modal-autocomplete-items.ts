@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ViewController } from 'ionic-angular';
+import { ViewController, NavController } from 'ionic-angular';
+import { HomePage } from '../home/home';
 
 declare var google: any;
 
@@ -13,8 +14,9 @@ export class ModalAutocompleteItems implements OnInit{
     autocomplete: any;
     acService:any;
     placesService: any;
+    destinations = [];
 
-    constructor(public viewCtrl: ViewController) {
+    constructor(public viewCtrl: ViewController, private nav: NavController) {
     }
 
     ngOnInit() {
@@ -25,12 +27,16 @@ export class ModalAutocompleteItems implements OnInit{
         };
     }
 
+    navigate(){
+      this.nav.pop(HomePage);
+    }
+
     dismiss() {
         this.viewCtrl.dismiss();
     }
 
     chooseItem(item: any) {
-        console.log('modal > chooseItem > item > ', item);
+        // console.log('modal > chooseItem > item > ', item);
         this.viewCtrl.dismiss(item);
     }
 
