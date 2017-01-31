@@ -14,6 +14,7 @@ declare var google;
 })
 export class HomePage {
   addressDestinations = [];
+  startAddress = [];
   latLng:string;
   address:any = {
       place: '',
@@ -59,7 +60,19 @@ export class HomePage {
           // console.log('page > modal dismissed > data > ', data);
           if(data){
               this.address.place = data.description;
-              this.getPlaceDetail(data.place_id);
+              this.getPlaceDetail(data.place_id,"dest");
+          }
+      })
+      this.navCtrl.push(modal);
+  }
+  addCustomOrigin() {
+      this.reset();
+      let modal = this.modalCtrl.create(ModalAutocompleteItems);
+      modal.onDidDismiss(data => {
+          // console.log('page > modal dismissed > data > ', data);
+          if(data){
+              this.address.place = data.description;
+              this.getPlaceDetail(data.place_id,"origin");
           }
       })
       this.navCtrl.push(modal);
@@ -67,14 +80,20 @@ export class HomePage {
   private reset() {
       this.address.place = '';
   }
-  private getPlaceDetail(place_id:string):void {
+  private getPlaceDetail(place_id:string, type:string):void {
       var self = this;
       var request = {
           placeId: place_id
       };
        this.placesService = new google.maps.places.PlacesService(this.map);
-        this.placesService.getDetails(request, callback)
-      function callback(place, status) {
+       if(type == "dest"){
+        this.placesService.getDetails(request, callbackDest)
+      } else if (type == "origin") {
+        this.placesService.getDetails(request, callbackAddr)
+        console.log("in");
+      }
+
+      function callbackDest(place, status) {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
               self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
               var addressObj = {
@@ -82,11 +101,26 @@ export class HomePage {
                 latLng: self.latLng
               };
               self.addressDestinations.push(addressObj);
-              console.log(self.addressDestinations);
+              console.log("added destination");
           }else{
             //   console.log('page > getPlaceDetail > status > ', status);
           }
       }
+
+      function callbackAddr(place, status) {
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+              self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
+              var addressObj = {
+                formatted_address: place.formatted_address,
+                latLng: self.latLng
+              };
+              self.startAddress.push(addressObj);
+              console.log(self.startAddress);
+          }else{
+            //   console.log('page > getPlaceDetail > status > ', status);
+          }
+      }
+
   }
   goToPlaces(){
     // this.reset();

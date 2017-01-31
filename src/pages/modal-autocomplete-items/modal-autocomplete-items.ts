@@ -14,7 +14,6 @@ export class ModalAutocompleteItems implements OnInit{
     autocomplete: any;
     acService:any;
     placesService: any;
-    destinations = [];
 
     constructor(public viewCtrl: ViewController, private nav: NavController) {
     }
