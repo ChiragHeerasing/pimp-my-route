@@ -48,7 +48,7 @@ export class ModalAutocompleteItems implements OnInit{
         }
         let self = this;
         let config = {
-            types:  ['geocode'], // other types available in the API: 'establishment', 'regions', and 'cities'
+            types:  ['geocode'],
             input: this.autocomplete.query,
             componentRestrictions: { country: 'US' }
         }
