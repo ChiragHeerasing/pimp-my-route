@@ -15,6 +15,7 @@ declare var google;
   templateUrl: 'home.html'
 })
 export class HomePage {
+  startingLocation: boolean = false;
   addressDestinations = [];
   startAddress = [];
   latLng:string;
@@ -39,6 +40,14 @@ export class HomePage {
         console.log(data)
     });
 
+  }
+
+  showStartingLocationContent() {
+    if(this.startingLocation === true) {
+        this.startingLocation = false;
+    } else {
+      this.startingLocation = true
+    }
   }
 
   ionViewDidLoad() {

@@ -7,28 +7,28 @@
 </ion-header>
 
 <ion-content>
-    <ion-list-header>
-      Origin
+    <ion-list-header (click)="showStartingLocationContent()">
+      STARTING POINT
     </ion-list-header>
   <ion-list>
-    <ion-item>
-      <ion-toggle color="danger" [(ngModel)]="currentLocationToggle"></ion-toggle>
-      <ion-label *ngIf="currentLocationToggle">
-        Use current location
-      </ion-label>
-      <ion-label *ngIf="!currentLocationToggle">
-        Enter Starting Location
-      </ion-label>
-    </ion-item>
 
-    <ion-item *ngIf="!currentLocationToggle">
-      Starting Location
-      <button ion-button item-right (click)="addCustomOrigin()">
 
-        <ion-icon name="add-circle"> </ion-icon>
-        Address
-      </button>
-    </ion-item>
+    <div *ngIf="startingLocation">
+      <ion-item id="currentLocationlabel">
+        <ion-toggle color="danger" (click)="addCustomOrigin()"></ion-toggle>
+        <ion-label>
+          USE CURRENT LOCATION
+        </ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="!currentLocationToggle" class="startDest">
+        <ion-label floating>
+          Enter a Starting Location
+        </ion-label>
+        <ion-input></ion-input>
+      </ion-item>
+    </div>
+
 
     <ion-list *ngFor="let address of startAddress">
       <ion-item>
@@ -55,6 +55,7 @@
         <ion-icon name="add-circle"></ion-icon>
         Address
         </button>
+
     </ion-item>
   </ion-list>
 

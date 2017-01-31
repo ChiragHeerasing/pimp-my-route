@@ -1,0 +1,51 @@
+
+ion-list-header.item.item-ios.list-header.list-header-ios {
+  padding: 0;
+  ion-label {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+
+.startDest {
+  padding: 0;
+  ion-label #lbl-15 {
+    padding-left: 15px;
+  }
+}
+
+
+#currentLocationlabel {
+  padding: 0;
+  ion-label {
+    padding-left: 15px;
+  }
+}
+
+ion-icon {
+  padding-right: 10px;
+}
+
+#place-address-button-row {
+  padding: 0;
+  div.item-inner {
+    div.input-wrapper {
+      width: 0;
+      height: 0;
+    }
+  }
+}
+
+.item-ios .item-button {
+  height: 35px;
+}
+
+.add-button {
+  border-radius: 150px;
+  span.button-inner {
+    padding: 0 10px;
+
+  }
+}
