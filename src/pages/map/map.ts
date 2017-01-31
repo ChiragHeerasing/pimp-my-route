@@ -20,22 +20,13 @@ export class MapPage {
     constructor(public navCtrl: NavController, public navParams: NavParams) {
 
       this.destA = this.navParams.data
-        Geolocation.getCurrentPosition().then((position) => {
-          this.origin = `${position.coords.latitude},${position.coords.longitude}`
-          console.log("receiving data: ",this.navParams.data);
-        },(err) => {
-          console.log(err);
-        });
+
     }
 
     ionViewDidLoad(){
-      this.loadMap();
-    }
-
-    loadMap(){
-
       Geolocation.getCurrentPosition().then((position) => {
-
+        this.origin = `${position.coords.latitude},${position.coords.longitude}`
+        console.log("receiving data: ",this.navParams.data);
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         let mapOptions = {
@@ -49,10 +40,11 @@ export class MapPage {
         this.directionsDisplay = new google.maps.DirectionsRenderer;
         this.directionsDisplay.setMap(this.map);
         this.calculateAndDisplayRoute(this.directionsService, this.directionsDisplay);
-      }, (err) => {
+      },(err) => {
         console.log(err);
       });
-    } // LOAD MAP
+
+    }
    calculateAndDisplayRoute(directionsService, directionsDisplay) {
         directionsService.route({
           origin: this.origin.toString(),
