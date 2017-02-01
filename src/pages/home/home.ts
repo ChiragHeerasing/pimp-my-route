@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnChanges } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnChanges, NgZone, ChangeDetectorRef } from '@angular/core';
 import { NavController, NavParams, ModalController} from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { MapPage } from '../map/map';
@@ -34,7 +34,7 @@ export class HomePage {
   startAddressName: string;
   placesArray: any;
 
-  constructor(public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+  constructor(private ref: ChangeDetectorRef,public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
     this.destinationForm = formBuilder.group({
        destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
    });
@@ -77,8 +77,10 @@ export class HomePage {
       modal.onDidDismiss(data => {
           // console.log('page > modal dismissed > data > ', data);
           if(data){
+              console.log("data!!",data)
               this.address.place = data.description;
               this.getPlaceDetail(data.place_id,"dest");
+              console.log("222",this.addressDestinations)
           }
       })
       this.navCtrl.push(modal);
@@ -126,7 +128,7 @@ export class HomePage {
                 latLng: self.latLng
               };
               self.addressDestinations.push(addressObj);
-              console.log("added destination");
+              self.ref.detectChanges()
           }else{
           }
       }
@@ -144,7 +146,6 @@ export class HomePage {
             //   console.log('page > getPlaceDetail > status > ', status);
           }
       }
-
   }
   goToPlaces(){
     // this.reset();
