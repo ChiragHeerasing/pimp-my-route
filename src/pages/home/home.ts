@@ -8,6 +8,7 @@ import { PlacesPage } from '../places/places';
 import { Http } from '@angular/http';
 import { AlertController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
+import {googleMapsKey} from '../../api-keys';
 
 declare var google;
 
@@ -48,11 +49,6 @@ export class HomePage {
     this.destinationForm = formBuilder.group({
        destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
    });
-
-    this.http.get('https://maps.googleapis.com/maps/api/distancematrix/json?origins=Portland+OR|40.6655101,-73.89188969999998&destinations=Bridgewater+Commons,+Commons+Way,+Bridgewater,+NJ|The+Mall+At+Short+Hills,+Morris+Turnpike,+Short+Hills,+NJ|Monmouth+Mall,+Eatontown,+NJ|Westfield+Garden+State+Plaza,+Garden+State+Plaza+Boulevard,+Paramus,+NJ|Newport+Centre+Mall,+Jersey+City,+NJ&departure_time=1541202457&traffic_model=best_guess&key=AIzaSyCPy5-96A3XCWTruphGYRPd9fqj3y66BZ8').map(res => res.json()).subscribe(data => {
-        console.log(data)
-    });
-
   }
 
   showStartingLocationContent() {
@@ -197,17 +193,43 @@ export class HomePage {
     }
   }
 
+  getJson(){
+    let travelTimes = new Array(100);
+    let baseUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=';
+    let latlngs = "";
+    let unixTime = Math.floor(Date.now()/1000).toString();
+    let key = googleMapsKey;
+    console.log("dest", this.addressDestinations)
+    for (var i in this.addressDestinations){
+      latlngs+=this.addressDestinations[i].latLng;
+      latlngs+="|"
+    }
+
+    console.log("latlngs", latlngs)
+
+    this.http.get(baseUrl+latlngs+'&destinations=' + latlngs + '&departure_time='+ unixTime+'&traffic_model=best_guess&key='+key).map(res => res.json()).subscribe(data => {
+      console.log(data)
+        for (var x in data.rows) {
+          travelTimes[x] = new Array(data.rows);
+          for (var y in data.rows[x].elements){
+              travelTimes[x][y] = data.rows[x].elements[y].duration_in_traffic.value;
+          }
+        }
+        });
+        console.log(travelTimes);
+  }
 
   getRoutes($event) {
-    let originLatLng= "";
+    let originLatLng= "";    
     (Object.keys(this.startAddress).length == 0) ? originLatLng=`${this.oLat},${this.oLng}` : originLatLng=this.startAddress.latLng ; 
     if (this.addressDestinations.length === 0) {
       this.presentAlert();
     } else {
       let data = {
-        origin: [this.startAddress],
+        origin: [originLatLng],
         destination: this.addressDestinations
       }
+      this.getJson();
       console.log("passing data:", data)
       this.navCtrl.push(MapPage, data);
     }
@@ -253,4 +275,5 @@ export class HomePage {
       return 'black';
     }
   }
+
 }
