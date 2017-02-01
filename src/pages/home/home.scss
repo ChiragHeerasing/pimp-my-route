@@ -7,9 +7,24 @@ ion-list-header.item.item-ios.list-header.list-header-ios {
   padding: 0;
   ion-label {
     color: red;
-    text-align: center;
+    text-align: left;
+    padding-left: 15px;
     font-weight: bold;
   }
+}
+
+.toolbar-title-ios {
+  padding-bottom: 5px;
+  font-size: 2.8rem;
+  border-bottom: 3px solid floralwhite;
+}
+
+.toolbar-ios {
+  height: 100px;
+}
+
+ion-list-header.item.item-ios.list-header.list-header-ios ion-label {
+  font-size: 3rem;
 }
 
 
