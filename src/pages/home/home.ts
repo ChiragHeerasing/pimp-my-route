@@ -193,13 +193,13 @@ export class HomePage {
     }
   }
 
-  getJson(){
+  getJson(originLatLng){
     let travelTimes = new Array(100);
     let baseUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=';
-    let latlngs = "";
+    let latlngs = originLatLng+"|";
     let unixTime = Math.floor(Date.now()/1000).toString();
     let key = googleMapsKey;
-    console.log("dest", this.addressDestinations)
+    console.log("origin", this.addressDestinations)
     for (var i in this.addressDestinations){
       latlngs+=this.addressDestinations[i].latLng;
       latlngs+="|"
@@ -229,7 +229,7 @@ export class HomePage {
         origin: [originLatLng],
         destination: this.addressDestinations
       }
-      this.getJson();
+      this.getJson(originLatLng);
       console.log("passing data:", data)
       this.navCtrl.push(MapPage, data);
     }
