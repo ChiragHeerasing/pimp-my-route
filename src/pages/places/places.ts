@@ -19,10 +19,12 @@ export class PlacesPage{
   @ViewChild('map') mapElement: ElementRef;
   lat: any;
   lng: any;
+  placesLatLong: any;
 
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {}
 
   ionViewDidLoad() {
+    console.log("receiving data: ",this.navParams.data);
     console.log('ionViewDidLoad PlacesPage');
     this.loadMap();
     places=[];
@@ -59,7 +61,8 @@ export class PlacesPage{
       this.viewCtrl.dismiss(places);
     }
   }
-    performSearch() {
+  private performSearch(): void {
+      var self = this;
       let centerSfo = new google.maps.LatLng(this.lat, this.lng);
       let circle = new google.maps.Circle({radius: 1000, center: centerSfo});
       let bounds = circle.getBounds();
@@ -67,19 +70,22 @@ export class PlacesPage{
       bounds: bounds,
       keyword: this.searchText
     };
-    this.service.radarSearch(request, this.callback);
-  }
+    this.service.radarSearch(request, callback);
 
-  callback(results, status) {
+  function callback(results, status) {
     if (status !== google.maps.places.PlacesServiceStatus.OK) {
       console.error(status);
       return;
     }else{
-      places = results.slice(0,5)
-      // this.viewCtrl.dismiss(places)
-
+      places = results.slice(0,5);
+      var tmp = {
+        name: self.searchText
+      }
+      places.unshift(tmp);
+      self.viewCtrl.dismiss(places);
     }
   }
+}
 
 
   dismiss(){

@@ -14,13 +14,13 @@
 
     <div *ngIf="startingLocation">
       <ion-item id="currentLocationlabel">
-        <ion-toggle color="danger" checked="true" [(ngModel)]="test" (ionChange)="addCustomOrigin()" ></ion-toggle>
+        <ion-toggle color="danger" checked="true" [(ngModel)]="currentLocationToggle" (ionChange)="addCustomOrigin()" ></ion-toggle>
         <ion-label>
           USE CURRENT LOCATION
         </ion-label>
       </ion-item>
-      <ion-item *ngIf="!startAddress===undefined">
-        {{startAddress.formatted_address}}
+      <ion-item *ngIf="startAddressName && !currentLocationToggle">
+          <ion-input [(ngModel)]="startAddressName"></ion-input>
       </ion-item>
     </div>
 

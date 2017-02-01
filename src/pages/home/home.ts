@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnChanges } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnChanges, NgZone, ChangeDetectorRef } from '@angular/core';
 import { NavController, NavParams, ModalController} from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { MapPage } from '../map/map';
@@ -18,8 +18,9 @@ export class HomePage {
   myDestinations: boolean = false;
   startingLocation: boolean = false;
   addressDestinations = [];
-  startAddress: Object = {};
+  startAddress: any = {};
   latLng:string;
+  placesLatLong: any;
   address:any = {
       place: '',
       set: false,
@@ -31,10 +32,10 @@ export class HomePage {
   destinationForm: FormGroup;
   currentLocationToggle: boolean = true;
   places: any;
-  test: boolean = true;
+  startAddressName: string;
   placesArray: any;
 
-  constructor(public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+  constructor(private ref: ChangeDetectorRef,public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
     this.destinationForm = formBuilder.group({
        destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
    });
@@ -59,7 +60,8 @@ export class HomePage {
   }
   loadMap(){
     Geolocation.getCurrentPosition().then((position) => {
-      let latLng = new google.maps.LatLng(-34.9290, 138.6010);
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      this.placesLatLong = latLng;
       let mapOptions = {
         center: latLng,
         zoom: 15,
@@ -77,14 +79,17 @@ export class HomePage {
       modal.onDidDismiss(data => {
           // console.log('page > modal dismissed > data > ', data);
           if(data){
+              console.log("data!!",data)
               this.address.place = data.description;
               this.getPlaceDetail(data.place_id,"dest");
+              console.log("222",this.addressDestinations)
           }
       })
       this.navCtrl.push(modal);
   }
   addCustomOrigin() {
-    if (!this.test){
+    this.startAddress = {};
+    if (!this.currentLocationToggle){
       this.reset();
       let modal = this.modalCtrl.create(ModalAutocompleteItems);
       modal.onDidDismiss(data => {
@@ -92,6 +97,7 @@ export class HomePage {
           if(data){
               this.address.place = data.description;
               this.getPlaceDetail(data.place_id,"origin");
+              this.startAddressName = data.description;
           }
       })
       this.navCtrl.push(modal);
@@ -99,7 +105,9 @@ export class HomePage {
   }
 
   private reset() {
-      this.address.place = '';
+    this.startAddressName = "";
+    this.address.place = '';
+    this.startAddress = {};
   }
 
   private getPlaceDetail(place_id:string, type:string):void {
@@ -112,7 +120,6 @@ export class HomePage {
         this.placesService.getDetails(request, callbackDest)
       } else if (type == "origin") {
         this.placesService.getDetails(request, callbackAddr)
-        console.log("in");
       }
 
       function callbackDest(place, status) {
@@ -123,9 +130,8 @@ export class HomePage {
                 latLng: self.latLng
               };
               self.addressDestinations.push(addressObj);
-              console.log("added destination");
+              self.ref.detectChanges()
           }else{
-            //   console.log('page > getPlaceDetail > status > ', status);
           }
       }
 
@@ -133,7 +139,7 @@ export class HomePage {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
               self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
               var addressObj = {
-                formatted_address: place.formatted_address,
+                name: place.formatted_address,
                 latLng: self.latLng
               };
               self.startAddress = addressObj;
@@ -142,7 +148,6 @@ export class HomePage {
             //   console.log('page > getPlaceDetail > status > ', status);
           }
       }
-
   }
   goToPlaces(){
     // this.reset();
@@ -154,7 +159,12 @@ export class HomePage {
               this.addressDestinations.push(data[0])
           }
       })
-      this.navCtrl.push(placesModal);
+      let data = {
+        lat: ["121"],
+        lng: ["212"]
+      }
+      console.log("passing data:", data)
+      this.navCtrl.push(placesModal, data);
   }
 
   starAddressDef() {
@@ -171,12 +181,11 @@ export class HomePage {
 
 
   getRoutes($event) {
-      console.log("passing data:", this.addressDestinations)
-      this.navCtrl.push(MapPage, this.addressDestinations);
-  }
-
-  ionViewWillEnter() {
-    console.log("enter", this.startAddress)
-  }
-
+      let data = {
+        origin: [this.startAddress],
+        destination: this.addressDestinations
+      }
+      console.log("passing data:", data)
+      this.navCtrl.push(MapPage, data);
+  } 
 }
