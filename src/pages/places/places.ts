@@ -17,7 +17,8 @@ export class PlacesPage{
   service: any;
   searchText: any;
   @ViewChild('map') mapElement: ElementRef;
-
+  lat: any;
+  lng: any;
 
   constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {}
 
@@ -29,7 +30,8 @@ export class PlacesPage{
     loadMap(){
 
     Geolocation.getCurrentPosition().then((position) => {
-
+      this.lat = position.coords.latitude
+      this.lng = position.coords.longitude
       let latLng = new google.maps.LatLng(-34.9290, 138.6010);
       let mapOptions = {
         center: latLng,
@@ -40,7 +42,7 @@ export class PlacesPage{
       this.infoWindow = new google.maps.InfoWindow();
       this.service = new google.maps.places.PlacesService(this.map);
       // this.map.addListener('idle', this.performSearch);
-      
+
 
     }, (err) => {
       console.log(err);
@@ -50,11 +52,15 @@ export class PlacesPage{
   search(){
     this.performSearch();
     if (places.length>0){
+      var tmp = {
+        name:this.searchText
+      }
+      places.unshift(tmp)
       this.viewCtrl.dismiss(places);
     }
   }
     performSearch() {
-      let centerSfo = new google.maps.LatLng(37.7749295, -122.41941550000001);
+      let centerSfo = new google.maps.LatLng(this.lat, this.lng);
       let circle = new google.maps.Circle({radius: 1000, center: centerSfo});
       let bounds = circle.getBounds();
     var request = {
