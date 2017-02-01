@@ -2,6 +2,10 @@ import { Component, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { ViewController } from 'ionic-angular';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { HomePage } from '../home/home';
+
 
 declare var google;
 var places: any[]= [];
@@ -15,13 +19,18 @@ export class PlacesPage{
   map: any;
   infoWindow: any;
   service: any;
-  searchText: any;
+  searchText: any = "";
   @ViewChild('map') mapElement: ElementRef;
   lat: any;
   lng: any;
   placesLatLong: any;
 
-  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {}
+  destinationForm: FormGroup;
+
+  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+    this.destinationForm = formBuilder.group({destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
+    });
+  }
 
   ionViewDidLoad() {
     console.log("receiving data: ",this.navParams.data);
@@ -34,7 +43,7 @@ export class PlacesPage{
     Geolocation.getCurrentPosition().then((position) => {
       this.lat = position.coords.latitude
       this.lng = position.coords.longitude
-      let latLng = new google.maps.LatLng(-34.9290, 138.6010);
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       let mapOptions = {
         center: latLng,
         zoom: 15,
@@ -52,19 +61,23 @@ export class PlacesPage{
   }
 
   search(){
+    if(!this.destinationForm.valid){
+      alert("you fucked up");
+    }else{
     this.performSearch();
-    if (places.length>0){
-      var tmp = {
-        name:this.searchText
+      if (places.length>0){
+        var tmp = {
+          name:this.searchText
+        }
+        places.unshift(tmp)
+        this.viewCtrl.dismiss(places);
       }
-      places.unshift(tmp)
-      this.viewCtrl.dismiss(places);
     }
   }
   private performSearch(): void {
       var self = this;
       let centerSfo = new google.maps.LatLng(this.lat, this.lng);
-      let circle = new google.maps.Circle({radius: 1000, center: centerSfo});
+      let circle = new google.maps.Circle({radius: 5000, center: centerSfo});
       let bounds = circle.getBounds();
     var request = {
       bounds: bounds,
@@ -90,6 +103,10 @@ export class PlacesPage{
 
   dismiss(){
     this.viewCtrl.dismiss();
+  }
+
+  navigate(){
+    this.navCtrl.pop(HomePage);
   }
 
 }

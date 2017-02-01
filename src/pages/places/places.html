@@ -7,6 +7,9 @@
 <ion-header>
 
   <ion-navbar>
+    <button (click)="navigate()" ion-button icon-left>
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
     <ion-title>places</ion-title>
   </ion-navbar>
 
@@ -15,13 +18,8 @@
 <div #map id="map"></div>
 <ion-content padding>
   <ion-list>
-    <ion-list-header>
-      Search places:
-    </ion-list-header>
-      <ion-item>
-          <ion-input placeholder="Search" [(ngModel)]="searchText" type="text"></ion-input>
-      </ion-item>
-      <button ion-button (click)="search()">Submit</button>
+          <ion-searchbar placeholder="Search" [(ngModel)]="searchText" type="text"></ion-searchbar>
+      <button id="submitPlace" ion-button full (click)="search()">Submit</button>
   </ion-list>
           <!--+b.FORM.query(*ngIf="!loading", (ngSubmit)="onSearch()")
             +e.INPUT.input(type="text", placeholder="Search", name="searchText", [(ngModel)]="searchText", [ngModelOptions]="{standalone: true}")
