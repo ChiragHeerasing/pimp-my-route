@@ -86,4 +86,17 @@ export class MapPage {
       });
       this.loader.dismiss();
       }
+
+  
+  navigate(){
+    let waypoints= ''
+      for( var item of this.waypointsSent){
+        waypoints+=item.latLng
+        waypoints+='+to:'
+      }
+    LaunchNavigator.navigate(waypoints+this.destA.latLng.toString(), {start: this.origin.toString()})
+        .then(
+
+    );
+  }
 }
