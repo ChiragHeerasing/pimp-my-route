@@ -1,6 +1,13 @@
-
+body {
+  color: floralwhite;
+}
 ion-item.item {
   padding: 0;
+}
+
+ion-navbar {
+  background-color: floralwhite;
+  border-bottom: 0px solid transparent;
 }
 
 ion-list-header.item.item-ios.list-header.list-header-ios {
@@ -14,11 +21,18 @@ ion-list-header.item.item-ios.list-header.list-header-ios {
   }
 }
 
+.item-ios {
+  background-color: floralwhite;
+  border-bottom: 1px solid black;
+}
+
 .toolbar-title-ios {
   padding-bottom: 5px;
   font-size: 2rem;
-  border-bottom: 3px solid floralwhite;
-  color: floralwhite;
+  color: black;
+}
+.toolbar-ios-primary .toolbar-title-ios, .toolbar-ios-primary .bar-button-clear-ios, .toolbar-ios-primary .bar-button-default-ios {
+  color: black;
 }
 
 .toolbar-ios {
@@ -68,10 +82,15 @@ ion-icon {
   width: 125px;
   padding: 0 15px;
   margin: 0 15px;
+  color: floralwhite;
   span.button-inner {
     padding: 0 10px;
 
   }
+}
+
+.button-inner {
+
 }
 
 #deleteDest {
@@ -114,10 +133,14 @@ ion-icon {
 }
 
 .xzibit {
-  background-color: black;
+  background-color: floralwhite;
 }
 
 #add-icon {
   font-weight: bolder;
   font-size: 2.75rem;
+}
+
+.list-ios .item-block .item-inner {
+  background-color: floralwhite;
 }

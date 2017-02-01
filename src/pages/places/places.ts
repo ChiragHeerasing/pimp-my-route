@@ -1,7 +1,9 @@
 import { Component, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
-import { ViewController } from 'ionic-angular';
+import { ViewController} from 'ionic-angular';
+import { HomePage } from '../home/home';
+
 
 declare var google;
 var places: any[]= [];
@@ -72,20 +74,24 @@ export class PlacesPage{
     };
     this.service.radarSearch(request, callback);
 
-  function callback(results, status) {
-    if (status !== google.maps.places.PlacesServiceStatus.OK) {
-      console.error(status);
-      return;
-    }else{
-      places = results.slice(0,5);
-      var tmp = {
-        name: self.searchText
+    function callback(results, status) {
+      if (status !== google.maps.places.PlacesServiceStatus.OK) {
+        console.error(status);
+          return;
+      } else {
+        places = results.slice(0,5);
+        var tmp = {
+          name: self.searchText
+        }
+        places.unshift(tmp);
+        self.viewCtrl.dismiss(places);
       }
-      places.unshift(tmp);
-      self.viewCtrl.dismiss(places);
     }
   }
-}
+
+  navigate(){
+    this.navCtrl.pop(HomePage);
+  }
 
 
   dismiss(){
