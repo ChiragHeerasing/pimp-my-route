@@ -18,7 +18,7 @@ export class HomePage {
   myDestinations: boolean = false;
   startingLocation: boolean = false;
   addressDestinations = [];
-  startAddress: Object = {};
+  startAddress: any = {};
   latLng:string;
   address:any = {
       place: '',
@@ -31,7 +31,7 @@ export class HomePage {
   destinationForm: FormGroup;
   currentLocationToggle: boolean = true;
   places: any;
-  test: boolean = true;
+  startAddressName: string;
   placesArray: any;
 
   constructor(public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
@@ -84,7 +84,7 @@ export class HomePage {
       this.navCtrl.push(modal);
   }
   addCustomOrigin() {
-    if (!this.test){
+    if (!this.currentLocationToggle){
       this.reset();
       let modal = this.modalCtrl.create(ModalAutocompleteItems);
       modal.onDidDismiss(data => {
@@ -92,6 +92,7 @@ export class HomePage {
           if(data){
               this.address.place = data.description;
               this.getPlaceDetail(data.place_id,"origin");
+              this.startAddressName = data.description;
           }
       })
       this.navCtrl.push(modal);
@@ -99,7 +100,8 @@ export class HomePage {
   }
 
   private reset() {
-      this.address.place = '';
+    this.startAddressName = ""
+    this.address.place = '';
   }
 
   private getPlaceDetail(place_id:string, type:string):void {
@@ -112,7 +114,6 @@ export class HomePage {
         this.placesService.getDetails(request, callbackDest)
       } else if (type == "origin") {
         this.placesService.getDetails(request, callbackAddr)
-        console.log("in");
       }
 
       function callbackDest(place, status) {
@@ -125,7 +126,6 @@ export class HomePage {
               self.addressDestinations.push(addressObj);
               console.log("added destination");
           }else{
-            //   console.log('page > getPlaceDetail > status > ', status);
           }
       }
 
@@ -133,7 +133,7 @@ export class HomePage {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
               self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
               var addressObj = {
-                formatted_address: place.formatted_address,
+                name: place.formatted_address,
                 latLng: self.latLng
               };
               self.startAddress = addressObj;
