@@ -12,20 +12,15 @@
     </ion-list-header>
   <ion-list>
 
-
     <div *ngIf="startingLocation">
       <ion-item id="currentLocationlabel">
-        <ion-toggle color="danger" (click)="addCustomOrigin()"></ion-toggle>
+        <ion-toggle color="danger" checked="true" [(ngModel)]="test" (ionChange)="addCustomOrigin()" ></ion-toggle>
         <ion-label>
           USE CURRENT LOCATION
         </ion-label>
       </ion-item>
-
-      <ion-item *ngIf="!currentLocationToggle" class="startDest">
-        <ion-label floating>
-          Enter a Starting Location
-        </ion-label>
-        <ion-input></ion-input>
+      <ion-item *ngIf="!startAddress===undefined">
+        {{startAddress.formatted_address}}
       </ion-item>
     </div>
 
@@ -39,39 +34,36 @@
 
 
 
-<div #map id="map"></div>
+  <div #map id="map"></div>
 
 
   </ion-list>
 
   <ion-list>
-    <ion-item>
-      Destinations
-        <button ion-button item-right (click)="goToPlaces()">
-          <ion-icon name="add-circle"></ion-icon>
-          Place
-        </button>
-        <button ion-button item-right (click)="showModal()">
-        <ion-icon name="add-circle"></ion-icon>
-        Address
-        </button>
-
-    </ion-item>
-  </ion-list>
-
-  <ion-list *ngFor="let address of addressDestinations">
-    <ion-item>
-      {{address.formatted_address}}
-    </ion-item>
-  </ion-list>
-
-    <!-- <form [formGroup]="destinationForm">
+    <ion-list-header id="destinations" (click)="showDestinations()">MY DESTINATIONS</ion-list-header>
+    <div *ngIf="myDestinations">
       <ion-item>
-          <ion-label floating>New Destination</ion-label>
-          <ion-input (click)="showAddressModal()" [(ngModel)]="address" formControlName="destination" type="text"></ion-input>
-      </ion-item>
-    </form> -->
+        <button ion-button class="add-button" (click)="goToPlaces()">
+          <ion-icon name="add-circle"></ion-icon>
+          PLACE
+        </button>
+        <button ion-button item-right class="add-button" (click)="showModal()">
+          <ion-icon name="add-circle"></ion-icon>
+          ADDRESS
+        </button>
 
-  <button ion-button full (click)="getRoutes()"> Get Route </button>
+      </ion-item>
+
+      <div *ngFor="let address of addressDestinations">
+        <ion-item id="dest-item">
+          {{address.formatted_address}}
+          <ion-icon id="deleteDest" name="close"></ion-icon>
+        </ion-item>
+      </div>
+    </div>
+</ion-list>
+
+
+<button ion-button full (click)="getRoutes()"> Get Route </button>
 
 </ion-content>

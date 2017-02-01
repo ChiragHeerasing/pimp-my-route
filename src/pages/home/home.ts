@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { NavController, NavParams, ModalController} from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { MapPage } from '../map/map';
@@ -15,9 +15,10 @@ declare var google;
   templateUrl: 'home.html'
 })
 export class HomePage {
+  myDestinations: boolean = false;
   startingLocation: boolean = false;
   addressDestinations = [];
-  startAddress = [];
+  startAddress: Object = {};
   latLng:string;
   address:any = {
       place: '',
@@ -30,6 +31,7 @@ export class HomePage {
   destinationForm: FormGroup;
   currentLocationToggle: boolean = true;
   places: any;
+  test: boolean = true;
 
   constructor(public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
     this.destinationForm = formBuilder.group({
@@ -81,6 +83,7 @@ export class HomePage {
       this.navCtrl.push(modal);
   }
   addCustomOrigin() {
+    if (!this.test){
       this.reset();
       let modal = this.modalCtrl.create(ModalAutocompleteItems);
       modal.onDidDismiss(data => {
@@ -91,10 +94,13 @@ export class HomePage {
           }
       })
       this.navCtrl.push(modal);
+      }
   }
+
   private reset() {
       this.address.place = '';
   }
+
   private getPlaceDetail(place_id:string, type:string):void {
       var self = this;
       var request = {
@@ -129,8 +135,8 @@ export class HomePage {
                 formatted_address: place.formatted_address,
                 latLng: self.latLng
               };
-              self.startAddress.push(addressObj);
-              console.log(self.startAddress);
+              self.startAddress = addressObj;
+              self.myDestinations = true;
           }else{
             //   console.log('page > getPlaceDetail > status > ', status);
           }
@@ -149,9 +155,26 @@ export class HomePage {
       this.navCtrl.push(placesModal);
   }
 
+  starAddressDef() {
+    console.log(this.startAddress);
+  }
+
+  showDestinations() {
+    if (this.myDestinations === true) {
+      this.myDestinations = false;
+    } else {
+      this.myDestinations = true;
+    }
+  }
+
 
   getRoutes($event) {
       console.log("passing data:", this.addressDestinations)
       this.navCtrl.push(MapPage, this.addressDestinations);
   }
+
+  ionViewWillEnter() {
+    console.log("enter", this.startAddress)
+  }
+
 }
