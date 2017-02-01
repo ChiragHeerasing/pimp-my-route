@@ -34,6 +34,8 @@ export class HomePage {
   places: any;
   startAddressName: string;
   placesArray: any;
+  oLat: any;
+  oLng: any;
 
   constructor(private ref: ChangeDetectorRef,public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
     this.destinationForm = formBuilder.group({
@@ -61,6 +63,8 @@ export class HomePage {
   loadMap(){
     Geolocation.getCurrentPosition().then((position) => {
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      this.oLat = position.coords.latitude;
+      this.oLng = position.coords.longitude;
       this.placesLatLong = latLng;
       let mapOptions = {
         center: latLng,
@@ -79,18 +83,16 @@ export class HomePage {
       modal.onDidDismiss(data => {
           // console.log('page > modal dismissed > data > ', data);
           if(data){
-              console.log("data!!",data)
               this.address.place = data.description;
               this.getPlaceDetail(data.place_id,"dest");
-              console.log("222",this.addressDestinations)
           }
       })
       this.navCtrl.push(modal);
   }
   addCustomOrigin() {
-    this.startAddress = {};
     if (!this.currentLocationToggle){
-      this.reset();
+    this.startAddress = {};
+    this.startAddressName = "";
       let modal = this.modalCtrl.create(ModalAutocompleteItems);
       modal.onDidDismiss(data => {
           // console.log('page > modal dismissed > data > ', data);
@@ -105,9 +107,7 @@ export class HomePage {
   }
 
   private reset() {
-    this.startAddressName = "";
     this.address.place = '';
-    this.startAddress = {};
   }
 
   private getPlaceDetail(place_id:string, type:string):void {
@@ -131,6 +131,7 @@ export class HomePage {
               };
               self.addressDestinations.push(addressObj);
               self.ref.detectChanges()
+              console.log("added destination, here is the new array", self.addressDestinations)
           }else{
           }
       }
@@ -156,7 +157,17 @@ export class HomePage {
         //   console.log('page > placesModal dismissed > data > ', data);
           if(data){
               console.log("places data back",data);
-              this.addressDestinations.push(data[0])
+              let places = {
+                name: data[0].name,
+                latLng:[`${data[1].geometry.location.lat()},${data[1].geometry.location.lng()}`,
+                        `${data[2].geometry.location.lat()},${data[2].geometry.location.lng()}`,
+                        `${data[3].geometry.location.lat()},${data[3].geometry.location.lng()}`,
+                        `${data[4].geometry.location.lat()},${data[4].geometry.location.lng()}`,
+                        `${data[5].geometry.location.lat()},${data[5].geometry.location.lng()}`
+                       ]
+              }
+              this.addressDestinations.push(places)
+              console.log(this.addressDestinations)
           }
       })
       let data = {
@@ -181,6 +192,10 @@ export class HomePage {
 
 
   getRoutes($event) {
+    let originLatLng= "";
+    (Object.keys(this.startAddress).length == 0) ? originLatLng=`${this.oLat},${this.oLng}` : originLatLng=this.startAddress.latLng ; 
+    console.log("address origin",originLatLng)
+    console.log("address desti",this.addressDestinations)
       let data = {
         origin: [this.startAddress],
         destination: this.addressDestinations
