@@ -17,7 +17,9 @@ import { PlacesPage } from '../pages/places/places';
     PlacesPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      backButtonText: ""
+    }),
   ],
   bootstrap: [IonicApp],
   entryComponents: [

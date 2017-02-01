@@ -6,6 +6,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { ModalAutocompleteItems } from '../modal-autocomplete-items/modal-autocomplete-items';
 import { PlacesPage } from '../places/places';
 import { Http } from '@angular/http';
+import { AlertController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 
 declare var google;
@@ -37,7 +38,13 @@ export class HomePage {
   oLat: any;
   oLng: any;
 
-  constructor(private ref: ChangeDetectorRef,public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+  constructor(private ref: ChangeDetectorRef,
+    public http: Http,
+    private modalCtrl: ModalController,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public formBuilder: FormBuilder,
+    private alertCtrl: AlertController) {
     this.destinationForm = formBuilder.group({
        destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
    });
@@ -194,13 +201,24 @@ export class HomePage {
   getRoutes($event) {
     let originLatLng= "";
     (Object.keys(this.startAddress).length == 0) ? originLatLng=`${this.oLat},${this.oLng}` : originLatLng=this.startAddress.latLng ; 
-    console.log("address origin",originLatLng)
-    console.log("address desti",this.addressDestinations)
+    if (this.addressDestinations.length === 0) {
+      this.presentAlert();
+    } else {
       let data = {
         origin: [this.startAddress],
         destination: this.addressDestinations
       }
       console.log("passing data:", data)
       this.navCtrl.push(MapPage, data);
-  } 
+    }
+  }
+
+  presentAlert() {
+  let alert = this.alertCtrl.create({
+    title: 'No Destinations',
+    subTitle: 'Please enter at least one destination',
+    buttons: ['Dismiss']
+  });
+  alert.present();
+}
 }

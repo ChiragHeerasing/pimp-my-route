@@ -1,8 +1,6 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>
-      PIMP MY ROUTE
-    </ion-title>
+    <ion-title>PMR</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -36,11 +34,11 @@
     <div *ngIf="myDestinations">
       <ion-item>
         <button ion-button class="add-button" (click)="goToPlaces()">
-          <ion-icon name="add-circle"></ion-icon>
+          <ion-icon id="add-icon" name="add"></ion-icon>
           PLACE
         </button>
         <button ion-button item-right class="add-button" (click)="showModal()">
-          <ion-icon name="add-circle"></ion-icon>
+          <ion-icon id="add-icon" name="add"></ion-icon>
           ADDRESS
         </button>
 
