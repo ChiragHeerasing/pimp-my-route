@@ -52,10 +52,16 @@
           <ion-icon id="deleteDest" name="close"></ion-icon>
         </ion-item>
       </div>
-    </div>
+      <ion-item id="">
+        <ion-toggle checked="false" color="danger"></ion-toggle>
+        <ion-label id="endRoute">
+          END ROUTE WITH CURRENT LOCATION
+        </ion-label>
+      </ion-item>
+
+    </div> <!-- MY DESTINATION END -->
 </ion-list>
 
 
-<button ion-button full (click)="getRoutes()"> Get Route </button>
-
+<button id="getRoute" ion-button full (click)="getRoutes()"> GET ROUTE </button>
 </ion-content>
