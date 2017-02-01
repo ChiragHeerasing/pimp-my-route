@@ -32,6 +32,7 @@ export class HomePage {
   currentLocationToggle: boolean = true;
   places: any;
   test: boolean = true;
+  placesArray: any;
 
   constructor(public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
     this.destinationForm = formBuilder.group({
@@ -118,7 +119,7 @@ export class HomePage {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
               self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
               var addressObj = {
-                formatted_address: place.formatted_address,
+                name: place.formatted_address,
                 latLng: self.latLng
               };
               self.addressDestinations.push(addressObj);
@@ -150,6 +151,7 @@ export class HomePage {
         //   console.log('page > placesModal dismissed > data > ', data);
           if(data){
               console.log("places data back",data);
+              this.addressDestinations.push(data[0])
           }
       })
       this.navCtrl.push(placesModal);
