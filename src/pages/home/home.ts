@@ -1,10 +1,12 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { NavController, NavParams, ModalController} from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { MapPage } from '../map/map';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalAutocompleteItems } from '../modal-autocomplete-items/modal-autocomplete-items';
 import { PlacesPage } from '../places/places';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
 
 declare var google;
 
@@ -13,7 +15,10 @@ declare var google;
   templateUrl: 'home.html'
 })
 export class HomePage {
+  myDestinations: boolean = false;
+  startingLocation: boolean = false;
   addressDestinations = [];
+  startAddress: Object = {};
   latLng:string;
   address:any = {
       place: '',
@@ -26,12 +31,25 @@ export class HomePage {
   destinationForm: FormGroup;
   currentLocationToggle: boolean = true;
   places: any;
+  test: boolean = true;
 
-  constructor(private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+  constructor(public http: Http, private modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
     this.destinationForm = formBuilder.group({
        destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
    });
 
+    this.http.get('https://maps.googleapis.com/maps/api/distancematrix/json?origins=Portland+OR|40.6655101,-73.89188969999998&destinations=Bridgewater+Commons,+Commons+Way,+Bridgewater,+NJ|The+Mall+At+Short+Hills,+Morris+Turnpike,+Short+Hills,+NJ|Monmouth+Mall,+Eatontown,+NJ|Westfield+Garden+State+Plaza,+Garden+State+Plaza+Boulevard,+Paramus,+NJ|Newport+Centre+Mall,+Jersey+City,+NJ&departure_time=1541202457&traffic_model=best_guess&key=AIzaSyCPy5-96A3XCWTruphGYRPd9fqj3y66BZ8').map(res => res.json()).subscribe(data => {
+        console.log(data)
+    });
+
+  }
+
+  showStartingLocationContent() {
+    if(this.startingLocation === true) {
+        this.startingLocation = false;
+    } else {
+      this.startingLocation = true
+    }
   }
 
   ionViewDidLoad() {
@@ -59,22 +77,44 @@ export class HomePage {
           // console.log('page > modal dismissed > data > ', data);
           if(data){
               this.address.place = data.description;
-              this.getPlaceDetail(data.place_id);
+              this.getPlaceDetail(data.place_id,"dest");
           }
       })
       this.navCtrl.push(modal);
   }
+  addCustomOrigin() {
+    if (!this.test){
+      this.reset();
+      let modal = this.modalCtrl.create(ModalAutocompleteItems);
+      modal.onDidDismiss(data => {
+          // console.log('page > modal dismissed > data > ', data);
+          if(data){
+              this.address.place = data.description;
+              this.getPlaceDetail(data.place_id,"origin");
+          }
+      })
+      this.navCtrl.push(modal);
+      }
+  }
+
   private reset() {
       this.address.place = '';
   }
-  private getPlaceDetail(place_id:string):void {
+
+  private getPlaceDetail(place_id:string, type:string):void {
       var self = this;
       var request = {
           placeId: place_id
       };
        this.placesService = new google.maps.places.PlacesService(this.map);
-        this.placesService.getDetails(request, callback)
-      function callback(place, status) {
+       if(type == "dest"){
+        this.placesService.getDetails(request, callbackDest)
+      } else if (type == "origin") {
+        this.placesService.getDetails(request, callbackAddr)
+        console.log("in");
+      }
+
+      function callbackDest(place, status) {
           if (status == google.maps.places.PlacesServiceStatus.OK) {
               self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
               var addressObj = {
@@ -82,11 +122,26 @@ export class HomePage {
                 latLng: self.latLng
               };
               self.addressDestinations.push(addressObj);
-              console.log(self.addressDestinations);
+              console.log("added destination");
           }else{
             //   console.log('page > getPlaceDetail > status > ', status);
           }
       }
+
+      function callbackAddr(place, status) {
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+              self.latLng = place.geometry.location.lat()+","+place.geometry.location.lng();
+              var addressObj = {
+                formatted_address: place.formatted_address,
+                latLng: self.latLng
+              };
+              self.startAddress = addressObj;
+              self.myDestinations = true;
+          }else{
+            //   console.log('page > getPlaceDetail > status > ', status);
+          }
+      }
+
   }
   goToPlaces(){
     // this.reset();
@@ -100,9 +155,26 @@ export class HomePage {
       this.navCtrl.push(placesModal);
   }
 
+  starAddressDef() {
+    console.log(this.startAddress);
+  }
+
+  showDestinations() {
+    if (this.myDestinations === true) {
+      this.myDestinations = false;
+    } else {
+      this.myDestinations = true;
+    }
+  }
+
 
   getRoutes($event) {
       console.log("passing data:", this.addressDestinations)
       this.navCtrl.push(MapPage, this.addressDestinations);
   }
+
+  ionViewWillEnter() {
+    console.log("enter", this.startAddress)
+  }
+
 }
