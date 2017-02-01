@@ -84,6 +84,7 @@ export class HomePage {
       this.navCtrl.push(modal);
   }
   addCustomOrigin() {
+    this.startAddress = {};
     if (!this.currentLocationToggle){
       this.reset();
       let modal = this.modalCtrl.create(ModalAutocompleteItems);
@@ -100,8 +101,9 @@ export class HomePage {
   }
 
   private reset() {
-    this.startAddressName = ""
+    this.startAddressName = "";
     this.address.place = '';
+    this.startAddress = {};
   }
 
   private getPlaceDetail(place_id:string, type:string):void {
@@ -171,12 +173,11 @@ export class HomePage {
 
 
   getRoutes($event) {
-      console.log("passing data:", this.addressDestinations)
-      this.navCtrl.push(MapPage, this.addressDestinations);
-  }
-
-  ionViewWillEnter() {
-    console.log("enter", this.startAddress)
-  }
-
+      let data = {
+        origin: [this.startAddress],
+        destination: this.addressDestinations
+      }
+      console.log("passing data:", data)
+      this.navCtrl.push(MapPage, data);
+  } 
 }

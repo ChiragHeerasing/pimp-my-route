@@ -18,17 +18,22 @@ export class MapPage {
     directionsDisplay: any;
     origin:any;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-      this.destA = this.navParams.data[this.navParams.data.length-1];
-      this.waypointsSent = this.navParams.data.slice(0, -1);
+    constructor(public navCtrl: NavController, public navParams: NavParams) {
+      console.log("receiving data: ",this.navParams.data);
+      this.origin = this.navParams.data.origin[0].latLng
+      this.destA = this.navParams.data.destination[this.navParams.data.destination.length-1];
+      this.waypointsSent = this.navParams.data.destination.slice(0, -1);
 
     }
 
     ionViewDidLoad(){
       Geolocation.getCurrentPosition().then((position) => {
+      if (this.origin === undefined){
         this.origin = `${position.coords.latitude},${position.coords.longitude}`
-        console.log("receiving data: ",this.navParams.data);
+      }
+        console.log("origin: ",this.origin)
+        
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         let mapOptions = {
