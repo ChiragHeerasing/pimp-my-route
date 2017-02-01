@@ -1,14 +1,13 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>
-      PIMP MY ROUTE
-    </ion-title>
+  <ion-navbar color="secondary">
+    <ion-title>PMR</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="xzibit">
     <ion-list-header (click)="showStartingLocationContent()">
-      STARTING POINT
+    <ion-label [style.color]="activeStartingColor()">STARTING POINT</ion-label>
+
     </ion-list-header>
 
 
@@ -19,8 +18,12 @@
           USE CURRENT LOCATION
         </ion-label>
       </ion-item>
-      <ion-item *ngIf="startAddressName && !currentLocationToggle">
-          <ion-input [(ngModel)]="startAddressName"></ion-input>
+      <ion-item id="newStart" *ngIf="startAddressName && !currentLocationToggle">
+        <ion-label>
+          <ion-icon id="successAddDest" name="checkmark-circle"></ion-icon>
+          {{startAddressName}}
+          <ion-icon id="deleteDest" name="close" (click)="deleteOriginDestination(startAddressName)"></ion-icon>
+        </ion-label>
       </ion-item>
     </div>
 
@@ -32,15 +35,19 @@
 
 
   <ion-list>
-    <ion-list-header id="destinations" (click)="showDestinations()">DESTINATIONS</ion-list-header>
+    <ion-list-header id="destinations" (click)="showDestinations()" >
+
+      <ion-label [style.color]="activeDestColor()">DESTINATIONS</ion-label>
+      <ion-icon class="destIcons" name="pizza"></ion-icon><ion-icon class="destIcons" name="cafe"></ion-icon><ion-icon class="destIcons" name="beer"></ion-icon>
+    </ion-list-header>
     <div *ngIf="myDestinations">
       <ion-item>
         <button ion-button class="add-button" (click)="goToPlaces()">
-          <ion-icon name="add-circle"></ion-icon>
+          <ion-icon id="add-icon" name="add"></ion-icon>
           PLACE
         </button>
         <button ion-button item-right class="add-button" (click)="showModal()">
-          <ion-icon name="add-circle"></ion-icon>
+          <ion-icon id="add-icon" name="add"></ion-icon>
           ADDRESS
         </button>
 
@@ -48,14 +55,21 @@
 
       <div *ngFor="let address of addressDestinations">
         <ion-item id="dest-item">
+          <ion-icon id="successAddDest" name="checkmark-circle"></ion-icon>
           {{address.name}}
-          <ion-icon id="deleteDest" name="close"></ion-icon>
+          <ion-icon id="deleteDest" name="close" (click)="deleteDestination(address)"></ion-icon>
         </ion-item>
       </div>
-    </div>
+      <ion-item id="">
+        <ion-toggle checked="false" color="danger"></ion-toggle>
+        <ion-label id="endRoute">
+          END ROUTE WITH CURRENT LOCATION
+        </ion-label>
+      </ion-item>
+
+    </div> <!-- MY DESTINATION END -->
 </ion-list>
 
 
-<button ion-button full (click)="getRoutes()"> Get Route </button>
-
+<button id="getRoute" ion-button full (click)="getRoutes()"> GET ROUTE </button>
 </ion-content>

@@ -1,13 +1,13 @@
 <ion-header>
   <ion-navbar color="secondary">
-    <button (click)="navigate()" ion-button icon-left>
-      <ion-icon name="arrow-dropleft-circle"></ion-icon>
+    <button (click)="navigate()" ion-button color="secondary" icon-left>
+      <ion-icon name="arrow-back"></ion-icon>
     </button>
-    <ion-title>Search address</ion-title>
+    <ion-title>Search Address</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar
+    <ion-searchbar id="addressSearchBar"
         [(ngModel)]="autocomplete.query"
         [showCancelButton]="true"
         (ionInput)="updateSearch()"
@@ -15,7 +15,7 @@
         placeholder="Start typing and select ...">
     </ion-searchbar>
     <ion-list>
-        <ion-item *ngFor="let item of autocompleteItems"
+        <ion-item id="autoItems" *ngFor="let item of autocompleteItems"
             (click)="chooseItem(item)">
             {{ item.description }}
         </ion-item>
