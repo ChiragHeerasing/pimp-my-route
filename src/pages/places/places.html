@@ -12,12 +12,8 @@
 <ion-content padding>
   <ion-list>
       <ion-item>
-          <ion-input placeholder="Search" [(ngModel)]="searchText" type="text"></ion-input>
+          <ion-input placeholder="Search" [(ngModel)]="searchText" type="text" autofocus></ion-input>
       </ion-item>
       <button ion-button (click)="search()">Submit</button>
   </ion-list>
-          <!--+b.FORM.query(*ngIf="!loading", (ngSubmit)="onSearch()")
-            +e.INPUT.input(type="text", placeholder="Search", name="searchText", [(ngModel)]="searchText", [ngModelOptions]="{standalone: true}")
-            +e.BUTTON.button(type="submit", title="Search")-->
-
 </ion-content>

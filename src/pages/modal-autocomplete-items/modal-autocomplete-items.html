@@ -7,7 +7,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-    <ion-searchbar
+    <ion-searchbar id="addressSearchBar"
         [(ngModel)]="autocomplete.query"
         [showCancelButton]="true"
         (ionInput)="updateSearch()"
@@ -15,7 +15,7 @@
         placeholder="Start typing and select ...">
     </ion-searchbar>
     <ion-list>
-        <ion-item *ngFor="let item of autocompleteItems"
+        <ion-item id="autoItems" *ngFor="let item of autocompleteItems"
             (click)="chooseItem(item)">
             {{ item.description }}
         </ion-item>

@@ -1,0 +1,25 @@
+.searchbar-ios {
+  border-bottom: 0px solid red;
+  background: 0;
+}
+
+#autoItems {
+  padding: 0;
+  div.item-inner {
+    padding: 0;
+    div.input-wrapper {
+      ion-label {
+        padding: 0 15px;
+      }
+    }
+  }
+}
+
+// * {
+//   background-color: floralwhite;
+// }
+
+#addressSearchBar ion-searchbar.searchbar.searchbar-ios {
+  padding: 0 15px;
+  background-color: floralwhite;
+}

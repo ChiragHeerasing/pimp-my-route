@@ -17,8 +17,12 @@
           USE CURRENT LOCATION
         </ion-label>
       </ion-item>
-      <ion-item *ngIf="startAddressName && !currentLocationToggle">
-          <ion-input [(ngModel)]="startAddressName"></ion-input>
+      <ion-item id="newStart" *ngIf="startAddressName && !currentLocationToggle">
+        <ion-label>
+          <ion-icon id="successAddDest" name="checkmark-circle"></ion-icon>
+          {{startAddressName}}
+          <ion-icon id="deleteDest" name="close" (click)="deleteOriginDestination(startAddressName)"></ion-icon>
+        </ion-label>
       </ion-item>
     </div>
 
@@ -48,7 +52,7 @@
         <ion-item id="dest-item">
           <ion-icon id="successAddDest" name="checkmark-circle"></ion-icon>
           {{address.name}}
-          <ion-icon id="deleteDest" name="close"></ion-icon>
+          <ion-icon id="deleteDest" name="close" (click)="deleteDestination(address)"></ion-icon>
         </ion-item>
       </div>
       <ion-item id="">

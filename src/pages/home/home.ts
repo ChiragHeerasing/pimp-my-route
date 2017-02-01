@@ -214,11 +214,28 @@ export class HomePage {
   }
 
   presentAlert() {
-  let alert = this.alertCtrl.create({
-    title: 'No Destinations',
-    subTitle: 'Please enter at least one destination',
-    buttons: ['Dismiss']
-  });
-  alert.present();
-}
+    let alert = this.alertCtrl.create({
+      title: 'No Destinations',
+      subTitle: 'Please enter at least one destination',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+  deleteDestination(address) {
+    var counter = 0
+    this.addressDestinations.forEach(destination => {
+      if(address === destination) {
+        this.addressDestinations.splice(counter, 1)
+      }
+      counter += 1;
+    });
+    this.ref.detectChanges()
+  }
+
+  deleteOriginDestination(startAddressName) {
+    this.startAddressName = "";
+    this.ref.detectChanges;
+    this.currentLocationToggle = true;
+  }
 }
