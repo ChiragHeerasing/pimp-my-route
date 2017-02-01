@@ -5,9 +5,14 @@ ion-item.item {
   padding: 0;
 }
 
+.header-ios .toolbar-ios:last-child .toolbar-background-ios {
+  border-bottom: 0px solid black;
+
+}
+
 ion-navbar {
   background-color: floralwhite;
-  border-bottom: 0px solid transparent;
+  border-bottom: 0px solid red;
 }
 
 ion-list-header.item.item-ios.list-header.list-header-ios {
@@ -27,8 +32,12 @@ ion-list-header.item.item-ios.list-header.list-header-ios {
 }
 
 .toolbar-title-ios {
-  padding-bottom: 5px;
-  font-size: 2rem;
+  margin-top:25px;
+  margin-bottom: 25px;
+  border: 2.5px solid black;
+  height: 75px;
+  width: 100%;
+  font-size: 5rem;
   color: black;
 }
 .toolbar-ios-primary .toolbar-title-ios, .toolbar-ios-primary .bar-button-clear-ios, .toolbar-ios-primary .bar-button-default-ios {
@@ -89,9 +98,6 @@ ion-icon {
   }
 }
 
-.button-inner {
-
-}
 
 #deleteDest {
   position: absolute;
@@ -121,12 +127,17 @@ ion-icon {
 
 #getRoute {
   position: fixed;
-  bottom: -5px;
-  height: 100px;
+  bottom: 0px;
+  height: 75px;
+  width: 100%;
   font-weight: bold;
   font-size: 2.5rem;
   background-color: floralwhite;
   color: black;
+  margin-bottom: 25px;
+  span.button-inner {
+    border: 2.5px solid black;
+  }
 }
 
 #endRoute {
@@ -134,6 +145,7 @@ ion-icon {
   font-weight: bold;
   font-size: 12px;
   padding-left: 15px;
+
 }
 
 .xzibit {
@@ -158,5 +170,13 @@ ion-icon {
     div.input-wrapper {
       padding: 0 15px;
     }
+  }
+}
+
+.destIcons {
+  color: black;
+  padding: 0 10px;
+  &:first-child {
+    margin-left: 15px;
   }
 }

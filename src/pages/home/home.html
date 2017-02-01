@@ -6,7 +6,8 @@
 
 <ion-content class="xzibit">
     <ion-list-header (click)="showStartingLocationContent()">
-      STARTING POINT
+    <ion-label [style.color]="activeStartingColor()">STARTING POINT</ion-label>
+
     </ion-list-header>
 
 
@@ -34,7 +35,11 @@
 
 
   <ion-list>
-    <ion-list-header id="destinations" (click)="showDestinations()">DESTINATIONS</ion-list-header>
+    <ion-list-header id="destinations" (click)="showDestinations()" >
+
+      <ion-label [style.color]="activeDestColor()">DESTINATIONS</ion-label>
+      <ion-icon class="destIcons" name="pizza"></ion-icon><ion-icon class="destIcons" name="cafe"></ion-icon><ion-icon class="destIcons" name="beer"></ion-icon>
+    </ion-list-header>
     <div *ngIf="myDestinations">
       <ion-item>
         <button ion-button class="add-button" (click)="goToPlaces()">

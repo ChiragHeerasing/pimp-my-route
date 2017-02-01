@@ -238,4 +238,19 @@ export class HomePage {
     this.ref.detectChanges;
     this.currentLocationToggle = true;
   }
+
+  activeStartingColor() {
+    if (this.startingLocation === true) {
+      return 'red';
+    } else {
+      return 'black';
+    }
+  }
+  activeDestColor() {
+    if (this.myDestinations === true) {
+      return 'red';
+    } else {
+      return 'black';
+    }
+  }
 }
