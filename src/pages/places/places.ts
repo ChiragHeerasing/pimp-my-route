@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
-import { ViewController } from 'ionic-angular';
+import { ViewController, AlertController } from 'ionic-angular';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { HomePage } from '../home/home';
@@ -27,7 +27,7 @@ export class PlacesPage{
 
   destinationForm: FormGroup;
 
-  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder) {
+  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, private alertCtrl: AlertController) {
     this.destinationForm = formBuilder.group({destination: ['', Validators.compose([Validators.required, Validators.pattern('[a-zA-Z0-9]*')])],
     });
   }
@@ -60,9 +60,15 @@ export class PlacesPage{
     });
   }
 
+
   search(){
     if(!this.destinationForm.valid){
-      alert("you fucked up");
+      let alert = this.alertCtrl.create({
+        title: 'Invalid Input',
+        subTitle: 'Enter Valid Place',
+        buttons: ['Ok']
+      });
+      alert.present();
     }else{
     this.performSearch();
       if (places.length>0){
