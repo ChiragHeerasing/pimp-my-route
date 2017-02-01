@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { LoadingController, NavController, NavParams } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
+import { LaunchNavigator, LaunchNavigatorOptions } from 'ionic-native';
 
 declare var google;
 
@@ -17,9 +18,12 @@ export class MapPage {
     directionsService: any;
     directionsDisplay: any;
     origin:any;
+    loader = this.loadingController.create({
+        content: 'Finding best routes...',
+        spinner: 'bubbles'
+      });
 
-
-    constructor(public navCtrl: NavController, public navParams: NavParams) {
+    constructor(private loadingController: LoadingController, public navCtrl: NavController, public navParams: NavParams) {
       console.log("receiving data: ",this.navParams.data);
       this.origin = this.navParams.data.origin[0].latLng
       this.destA = this.navParams.data.destination[this.navParams.data.destination.length-1];
@@ -28,7 +32,9 @@ export class MapPage {
     }
 
     ionViewDidLoad(){
-      Geolocation.getCurrentPosition().then((position) => {
+
+       this.loader.present().then(( )=>{
+        Geolocation.getCurrentPosition().then((position) => {
       if (this.origin === undefined){
         this.origin = `${position.coords.latitude},${position.coords.longitude}`
       }
@@ -50,6 +56,9 @@ export class MapPage {
       },(err) => {
         console.log(err);
       });
+
+      })
+      
 
     }
    calculateAndDisplayRoute(directionsService, directionsDisplay) {
@@ -75,5 +84,6 @@ export class MapPage {
           window.alert('Directions request failed due to ' + status);
         }
       });
+      this.loader.dismiss();
       }
 }
