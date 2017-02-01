@@ -23,7 +23,7 @@ ion-list-header.item.item-ios.list-header.list-header-ios {
 
 .item-ios {
   background-color: floralwhite;
-  border-bottom: 1px solid black;
+  border-bottom: 0px solid black;
 }
 
 .toolbar-title-ios {
@@ -98,7 +98,7 @@ ion-icon {
   color: red;
   font-size: 40px;
   font-weight: bold;
-  top: 2.5px;
+  top: .5px;
   right: 10px;
   padding: 0;
 }
@@ -109,11 +109,14 @@ ion-icon {
     padding: 0;
     div.input-wrapper {
       ion-label {
-        padding-left: 15px;
+        padding: 0 15px;
       }
     }
   }
+}
 
+#successAddDest {
+  font-weight: light;
 }
 
 #getRoute {
@@ -128,7 +131,8 @@ ion-icon {
 
 #endRoute {
   color: red;
-  font-size: 14px;
+  font-weight: bold;
+  font-size: 12px;
   padding-left: 15px;
 }
 
