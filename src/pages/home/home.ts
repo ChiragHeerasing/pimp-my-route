@@ -20,6 +20,7 @@ export class HomePage {
   addressDestinations = [];
   startAddress: any = {};
   latLng:string;
+  placesLatLong: any;
   address:any = {
       place: '',
       set: false,
@@ -59,7 +60,8 @@ export class HomePage {
   }
   loadMap(){
     Geolocation.getCurrentPosition().then((position) => {
-      let latLng = new google.maps.LatLng(-34.9290, 138.6010);
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      this.placesLatLong = latLng;
       let mapOptions = {
         center: latLng,
         zoom: 15,
@@ -157,7 +159,12 @@ export class HomePage {
               this.addressDestinations.push(data[0])
           }
       })
-      this.navCtrl.push(placesModal);
+      let data = {
+        lat: ["121"],
+        lng: ["212"]
+      }
+      console.log("passing data:", data)
+      this.navCtrl.push(placesModal, data);
   }
 
   starAddressDef() {
