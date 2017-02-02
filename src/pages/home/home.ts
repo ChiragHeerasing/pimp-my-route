@@ -39,6 +39,7 @@ export class HomePage {
   oLat: any;
   oLng: any;
   locationsPermutations: any;
+  travelTimes: any;
 
   constructor(private ref: ChangeDetectorRef,
     public http: Http,
@@ -241,25 +242,26 @@ export class HomePage {
           }
         }
         });
-        console.log(travelTimes);
-        console.log("permu",addressArray," ", this.permutator(addressArray));  
-        // this.locationsPermutations = this.permutator(addressArray)
-
-
-
+        // console.log(travelTimes);
+        // console.log("permu",addressArray," ", this.permutator(addressArray));
+        this.locationsPermutations = this.permutator(addressArray)
+        this.travelTimes = travelTimes;
   }
 
   getRoutes($event) {
-    let originLatLng= "";    
-    (Object.keys(this.startAddress).length == 0) ? originLatLng=`${this.oLat},${this.oLng}` : originLatLng=this.startAddress.latLng ; 
+    let originLatLng= "";
+    (Object.keys(this.startAddress).length == 0) ? originLatLng=`${this.oLat},${this.oLng}` : originLatLng=this.startAddress.latLng ;
     if (this.addressDestinations.length === 0) {
       this.presentAlert();
     } else {
+      this.getJson(originLatLng);
+
       let data = {
         origin: [originLatLng],
-        destination: this.addressDestinations
+        destination: this.addressDestinations,
+        permutations: this.locationsPermutations,
+        travelTimes: this.travelTimes 
       }
-      this.getJson(originLatLng);
       console.log("passing data:", data)
       this.navCtrl.push(MapPage, data);
     }

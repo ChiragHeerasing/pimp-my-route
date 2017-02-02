@@ -4,7 +4,7 @@ import { Geolocation } from 'ionic-native';
 import { LaunchNavigator, LaunchNavigatorOptions } from 'ionic-native';
 
 declare var google;
-declare var StopIteration;
+var StopIteration: any = "hi";
 
 @Component({
   selector: 'page-map',
@@ -19,6 +19,13 @@ export class MapPage {
     directionsService: any;
     directionsDisplay: any;
     origin:any;
+    allPossibilities:any[] = [];
+    allPossibilitiesLocations:any[] = [];
+    // Array of Distances
+    // allPossibilities = [[15658, 15990],[842, 15912]];
+    // Array of travel order possibilities (latLng each index)
+    // allPossibilitiesLocations = [['Portland','Medford','Vancouver'],['Portland','Vancouver','Medford']];
+
     loader = this.loadingController.create({
         content: 'Finding best routes...',
         spinner: 'bubbles'
@@ -29,7 +36,10 @@ export class MapPage {
       this.origin = this.navParams.data.origin[0].latLng
       this.destA = this.navParams.data.destination[this.navParams.data.destination.length-1];
       this.waypointsSent = this.navParams.data.destination.slice(0, -1);
-
+      this.allPossibilities = this.navParams.data.travelTimes;
+      this.allPossibilitiesLocations = this.navParams.data.permutations;
+      console.log("poss ", this.allPossibilities, " possloc ", this.allPossibilitiesLocations);
+      this.fastRouteAlgorithm();
     }
 
     ionViewDidLoad(){
@@ -101,40 +111,20 @@ export class MapPage {
     );
   };
 
-// Array of Distances
-allPossibilities = [[15658, 15990],[842, 15912]];
-// Array of travel order possibilities (latLng each index)
-allPossibilitiesEng = [['Portland','Medford','Vancouver'],['Portland','Vancouver','Medford']];
+  lowestTime(fastest_time_var, allPosArray) {
+    console.log(fastest_time_var, " and ", allPosArray, " and ", this.allPossibilitiesLocations);
+    return this.allPossibilitiesLocations[allPosArray.indexOf(fastest_time_var)];
+  };
 
-  yo(){
-    (() => {
-      if(typeof StopIteration == "undefined") {
-        StopIteration = new Error("StopIteration");
-      }
-
-      let oldForEach = Array.prototype.forEach;
-
-      if(oldForEach) {
-        Array.prototype.forEach = function() {
-          try {
-            oldForEach.apply(this, [].slice.call(arguments, 0));
-          }
-          catch(e) {
-            if(e !== StopIteration) {
-              throw e;
-            }
-          }
-        };
-      }
-    })();
+  fastRouteAlgorithm(){
 
     let allTimes = [];
     let total_result = 0;
     let fastest_time = 0;
-
-    this.allPossibilities.forEach(function(innerArray, i){
+    this.allPossibilities.forEach((innerArray, i) => {
+      console.log("inner: ", innerArray);
       total_result = 0;
-      innerArray.forEach(function(time_to, i2){
+      innerArray.forEach((time_to, i2) => {
         total_result += time_to;
 
       if(i === 0){
@@ -148,16 +138,14 @@ allPossibilitiesEng = [['Portland','Medford','Vancouver'],['Portland','Vancouver
       if(total_result > fastest_time){
         console.log("break");
         allTimes.push(9999999);
-        throw StopIteration;
       } else if((innerArray.length -1) === i2){
         allTimes.push(total_result);
       };
-
+      console.log(fastest_time, " total " + total_result);
      });
     });
+    console.log("Diego joto", this.lowestTime(fastest_time, allTimes));
   }
-  lowestTime(fastest_time_var, allPosArray) {
-    return this.allPossibilitiesEng[allPosArray.indexOf(fastest_time_var)];
-  };
+
 
 }
