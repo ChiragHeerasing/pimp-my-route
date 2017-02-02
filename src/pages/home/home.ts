@@ -38,6 +38,7 @@ export class HomePage {
   placesArray: any;
   oLat: any;
   oLng: any;
+  locationsPermutations: any;
 
   constructor(private ref: ChangeDetectorRef,
     public http: Http,
@@ -193,14 +194,38 @@ export class HomePage {
     }
   }
 
+  permutator = (inputArr) => {
+    let result = [];
+
+    const permute = (arr, m = []) => {
+      if (arr.length === 0) {
+        result.push(m)
+      } else {
+        for (let i = 0; i < arr.length; i++) {
+          let curr = arr.slice();
+          let next = curr.splice(i, 1);
+          permute(curr.slice(), m.concat(next))
+      }
+    }
+  }
+
+  permute(inputArr)
+
+  return result;
+  }
+
+
+
   getJson(originLatLng){
     let travelTimes = new Array(100);
     let baseUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=';
     let latlngs = originLatLng+"|";
     let unixTime = Math.floor(Date.now()/1000).toString();
     let key = googleMapsKey;
+    let addressArray: string[] = []
     console.log("origin", this.addressDestinations)
     for (var i in this.addressDestinations){
+      addressArray.push(i);
       latlngs+=this.addressDestinations[i].latLng;
       latlngs+="|"
     }
@@ -217,6 +242,11 @@ export class HomePage {
         }
         });
         console.log(travelTimes);
+        console.log("permu",addressArray," ", this.permutator(addressArray));  
+        // this.locationsPermutations = this.permutator(addressArray)
+
+
+
   }
 
   getRoutes($event) {
