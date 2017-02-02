@@ -63,7 +63,7 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MapPage');
+    // console.log('ionViewDidLoad MapPage');
     this.loadMap();
   }
   loadMap(){
@@ -137,7 +137,7 @@ export class HomePage {
               };
               self.addressDestinations.push(addressObj);
               self.ref.detectChanges()
-              console.log("added destination, here is the new array", self.addressDestinations)
+              // console.log("added destination, here is the new array", self.addressDestinations)
           }else{
           }
       }
@@ -162,7 +162,7 @@ export class HomePage {
       placesModal.onDidDismiss(data => {
         //   console.log('page > placesModal dismissed > data > ', data);
           if(data){
-              console.log("places data back",data);
+              // console.log("places data back",data);
               let places = {
                 name: data[0].name,
                 latLng:[`${data[1].geometry.location.lat()},${data[1].geometry.location.lng()}`,
@@ -173,7 +173,7 @@ export class HomePage {
                        ]
               }
               this.addressDestinations.push(places)
-              console.log(this.addressDestinations)
+              // console.log(this.addressDestinations)
           }
       })
       let data = {
@@ -185,7 +185,7 @@ export class HomePage {
   }
 
   starAddressDef() {
-    console.log(this.startAddress);
+    // console.log(this.startAddress);
   }
 
   showDestinations() {
@@ -225,7 +225,7 @@ export class HomePage {
     let unixTime = Math.floor(Date.now()/1000).toString();
     let key = googleMapsKey;
     let addressArray: any[] = []
-    console.log("origin", this.addressDestinations)
+    // console.log("origin", this.addressDestinations)
     for (var i in this.addressDestinations){
       addressArray.push(parseInt(i)+1);
       latlngs+=this.addressDestinations[i].latLng;
@@ -235,7 +235,7 @@ export class HomePage {
     console.log("latlngs", latlngs)
 
     this.http.get(baseUrl+latlngs+'&destinations=' + latlngs + '&departure_time='+ unixTime+'&traffic_model=best_guess&key='+key).map(res => res.json()).subscribe(data => {
-      console.log(data)
+      // console.log(data)
         for (var x in data.rows) {
           travelTimes[x] = new Array(data.rows);
           for (var y in data.rows[x].elements){
@@ -258,7 +258,7 @@ export class HomePage {
       this.getJson(originLatLng);
       for(var j in this.locationsPermutations){
         this.locationsPermutations[j].unshift(0)
-        console.log(this.locationsPermutations[j])
+        // console.log(this.locationsPermutations[j])
       }
 
       let data = {

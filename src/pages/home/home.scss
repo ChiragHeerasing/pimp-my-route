@@ -1,0 +1,182 @@
+body {
+  color: floralwhite;
+}
+ion-item.item {
+  padding: 0;
+}
+
+.header-ios .toolbar-ios:last-child .toolbar-background-ios {
+  border-bottom: 0px solid black;
+
+}
+
+ion-navbar {
+  background-color: floralwhite;
+  border-bottom: 0px solid red;
+}
+
+ion-list-header.item.item-ios.list-header.list-header-ios {
+  padding: 0;
+
+  ion-label {
+    color: red;
+    text-align: left;
+    padding-left: 15px;
+    font-weight: bold;
+  }
+}
+
+.item-ios {
+  background-color: floralwhite;
+  border-bottom: 0px solid black;
+}
+
+.toolbar-title-ios {
+  margin-top:25px;
+  margin-bottom: 25px;
+  border: 2.5px solid black;
+  height: 75px;
+  width: 100%;
+  font-size: 5rem;
+  color: black;
+}
+.toolbar-ios-primary .toolbar-title-ios, .toolbar-ios-primary .bar-button-clear-ios, .toolbar-ios-primary .bar-button-default-ios {
+  color: black;
+}
+
+.toolbar-ios {
+  height: 100px;
+}
+
+ion-list-header.item.item-ios.list-header.list-header-ios ion-label {
+  font-size: 2.5rem;
+}
+
+
+.startDest {
+  padding: 0;
+  ion-label #lbl-15 {
+    padding-left: 15px;
+  }
+}
+
+
+#currentLocationlabel {
+  padding: 0;
+  ion-label {
+    padding-left: 15px;
+  }
+}
+
+ion-icon {
+  padding-right: 10px;
+}
+
+#place-address-button-row {
+  padding: 0;
+  div.item-inner {
+    div.input-wrapper {
+      width: 0;
+      height: 0;
+    }
+  }
+}
+
+.item-ios .item-button {
+  height: 35px;
+}
+
+.add-button {
+  border-radius: 150px;
+  width: 125px;
+  padding: 0 15px;
+  margin: 0 15px;
+  color: floralwhite;
+  span.button-inner {
+    padding: 0 10px;
+
+  }
+}
+
+
+#deleteDest {
+  position: absolute;
+  color: red;
+  font-size: 40px;
+  font-weight: bold;
+  top: .5px;
+  right: 10px;
+  padding: 0;
+}
+
+#dest-item {
+  padding: 0;
+  div.item-inner {
+    padding: 0;
+    div.input-wrapper {
+      ion-label {
+        padding: 0 25px 0 15px;
+      }
+    }
+  }
+}
+
+#successAddDest {
+  font-weight: light;
+}
+
+#getRoute {
+  position: fixed;
+  bottom: 0px;
+  height: 75px;
+  width: 100%;
+  font-weight: bold;
+  font-size: 2.5rem;
+  background-color: floralwhite;
+  color: black;
+  margin-bottom: 25px;
+  span.button-inner {
+    border: 2.5px solid black;
+  }
+}
+
+#endRoute {
+  color: red;
+  font-weight: bold;
+  font-size: 12px;
+  padding-left: 15px;
+
+}
+
+.xzibit {
+  background-color: floralwhite;
+}
+
+#add-icon {
+  font-weight: bolder;
+  font-size: 2.75rem;
+}
+
+.list-ios .item-block .item-inner {
+  background-color: floralwhite;
+}
+
+#newStart {
+  div.item-inner {
+    padding: 0;
+    #lbl-13 {
+      padding: 0 15px;
+    }
+    div.input-wrapper {
+      padding: 0 15px;
+    }
+  }
+}
+
+.destIcons {
+  color: black;
+  padding: 0 10px;
+  &:first-child {
+    margin-left: 15px;
+  }
+}
