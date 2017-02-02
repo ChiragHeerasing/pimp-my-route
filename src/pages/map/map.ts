@@ -4,6 +4,7 @@ import { Geolocation } from 'ionic-native';
 import { LaunchNavigator, LaunchNavigatorOptions } from 'ionic-native';
 
 declare var google;
+declare var StopIteration;
 
 @Component({
   selector: 'page-map',
@@ -39,7 +40,7 @@ export class MapPage {
         this.origin = `${position.coords.latitude},${position.coords.longitude}`
       }
         console.log("origin: ",this.origin)
-        
+
         let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         let mapOptions = {
@@ -58,7 +59,7 @@ export class MapPage {
       });
 
       })
-      
+
 
     }
    calculateAndDisplayRoute(directionsService, directionsDisplay) {
@@ -87,16 +88,76 @@ export class MapPage {
       this.loader.dismiss();
       }
 
-  
+
   navigate(){
     let waypoints= ''
       for( var item of this.waypointsSent){
-        waypoints+=item.latLng
-        waypoints+='+to:'
+        waypoints+=item.latLng;
+        waypoints+='+to:';
       }
     LaunchNavigator.navigate(waypoints+this.destA.latLng.toString(), {start: this.origin.toString()})
         .then(
 
     );
+  };
+
+// Array of Distances
+allPossibilities = [[15658, 15990],[842, 15912]];
+// Array of travel order possibilities (latLng each index)
+allPossibilitiesEng = [['Portland','Medford','Vancouver'],['Portland','Vancouver','Medford']];
+
+  yo(){
+    (() => {
+      if(typeof StopIteration == "undefined") {
+        StopIteration = new Error("StopIteration");
+      }
+
+      let oldForEach = Array.prototype.forEach;
+
+      if(oldForEach) {
+        Array.prototype.forEach = function() {
+          try {
+            oldForEach.apply(this, [].slice.call(arguments, 0));
+          }
+          catch(e) {
+            if(e !== StopIteration) {
+              throw e;
+            }
+          }
+        };
+      }
+    })();
+
+    let allTimes = [];
+    let total_result = 0;
+    let fastest_time = 0;
+
+    this.allPossibilities.forEach(function(innerArray, i){
+      total_result = 0;
+      innerArray.forEach(function(time_to, i2){
+        total_result += time_to;
+
+      if(i === 0){
+        fastest_time = total_result
+      } else if( i !== 0 && (innerArray.length -1) === i2) {
+        if(total_result < fastest_time){
+          fastest_time = total_result
+        };
+      };
+
+      if(total_result > fastest_time){
+        console.log("break");
+        allTimes.push(9999999);
+        throw StopIteration;
+      } else if((innerArray.length -1) === i2){
+        allTimes.push(total_result);
+      };
+
+     });
+    });
   }
+  lowestTime(fastest_time_var, allPosArray) {
+    return this.allPossibilitiesEng[allPosArray.indexOf(fastest_time_var)];
+  };
+
 }
