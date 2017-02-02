@@ -255,7 +255,9 @@ export class HomePage {
       this.presentAlert();
     } else {
       this.getJson(originLatLng);
-
+      for(var i of this.locationsPermutations){
+        i.unshift(0);
+      }
       let data = {
         origin: [originLatLng],
         destination: this.addressDestinations,
