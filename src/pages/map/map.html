@@ -9,6 +9,10 @@
 </ion-header>
 
 <ion-content>
-  <button ion-button (click)="navigate()">Navigate</button>
+  <ion-fab left bottom>
+    <button ion-fab (click)="navigate()" id="navBtn">
+      <ion-icon id="navIcon" name="navigate"></ion-icon>
+    </button>
+  </ion-fab>
   <div #map id="map"></div>
 </ion-content>
