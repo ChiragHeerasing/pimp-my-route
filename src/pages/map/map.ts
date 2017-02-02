@@ -22,8 +22,9 @@ export class MapPage {
     permutations:any[] = [];
     travelTime:any[] = [];
     destinations:any;
-
-
+    fastest: any[] = [];
+    waypts = [];
+    roundTrip: boolean;
     loader = this.loadingController.create({
         content: 'Finding best routes...',
         spinner: 'bubbles'
@@ -38,7 +39,13 @@ export class MapPage {
       this.destinations = this.navParams.data.destination;
       this.travelTime = this.navParams.data.travelTimes;
       this.permutations = this.navParams.data.permutations;
-      console.log("travelTime ", this.travelTime, " permutations ", this.permutations);
+       if(this.navParams.data.roundTrip){
+        for(var x in this.permutations){
+          this.permutations[x].push(0)
+        }
+        this.roundTrip = true;
+      }
+      console.log("travelTime ", this.travelTime, " permutations ", this.permutations[0], this.permutations[1], " round? ", this.roundTrip);
 
     }
 
@@ -67,57 +74,84 @@ export class MapPage {
       },(err) => {
         console.log(err);
       });
-
         
       })
 
 
     }
-  fastest: any[] = [];
+
   getFastestRoute(){
     let time1: number = 0;
     let time2: number = 99999999;
     for(var x = 0; x<(this.permutations.length); x++){
       for(var y = 0; y<this.permutations[x].length-1; y++){
         time1+=this.travelTime[this.permutations[x][y]][this.permutations[x][y+1]];
+        console.log("time1", time1, " sum ",this.travelTime[this.permutations[x][y]][this.permutations[x][y+1]])
       }
       if (time1<time2){
         time2 = time1;
         this.fastest[0]=(this.permutations[x])
       }
-      //  console.log("---", "time1:", time1, " time2: ",time2, " fastest: ",this.fastest)
+       console.log("---", "time1:", time1, " time2: ",time2, " fastest: ",this.fastest[0])
       time1 = 0;
     }
     time2 = 999999;
   }
- waypts = [];
+ 
    calculateAndDisplayRoute(directionsService, directionsDisplay) {
     this.getFastestRoute()
      this.waypts = [];
      this.fastest[0].shift()
      this.fastest[0]= this.fastest[0].map(x=>x-1);
-    //  console.log("check here", this.waypointsSent, this.destinations, this.fastest[0])
-    for (var i = 0; i < this.destinations.length-1; i++) {
-      // console.log("fastest:",this.fastest, this.fastest[0][i])
-      var tempObj= {
-       location: this.destinations[this.fastest[0][i]].latLng,
-       stopover: true
-      };
-      this.waypts.push(tempObj);
-    }
-      // console.log("final check: origin ", this.origin, " waypoints, ", waypts, " destination: ",this.destinations[this.fastest[0][this.fastest.length-1]] )
-      directionsService.route({
-        origin: this.origin.toString(),
-        destination: this.destinations[this.fastest[0][this.fastest[0].length-1]].latLng.toString(),
-        waypoints: this.waypts,
-        travelMode: 'DRIVING'
-      }, function(response, status) {
-        if (status === 'OK') {
-          directionsDisplay.setDirections(response);
-        } else {
-          window.alert('Directions request failed due to ' + status);
+     console.log("check here", this.waypointsSent, this.destinations, this.fastest[0])
+
+     if (!this.roundTrip){
+        for (var i = 0; i < this.destinations.length-1; i++) {
+          console.log("fastest:",this.fastest, this.fastest[0][i])
+          var tempObj= {
+          location: this.destinations[this.fastest[0][i]].latLng,
+          stopover: true
+        };
+        this.waypts.push(tempObj);
         }
-      });
+        console.log("final check: origin ", this.origin, " waypoints, ", this.waypts, " destination: ",this.destinations[this.fastest[0][this.fastest.length-1]] )
+        directionsService.route({
+          origin: this.origin.toString(),
+          destination: this.destinations[this.fastest[0][this.fastest[0].length-1]].latLng.toString(),
+          waypoints: this.waypts,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }else{
+        this.fastest[0].pop();
+        for (var i = 0; i < this.destinations.length; i++) {
+          console.log("fastest:",this.fastest, this.fastest[0][i])
+          var tempObj= {
+          location: this.destinations[this.fastest[0][i]].latLng,
+          stopover: true
+        };
+        this.waypts.push(tempObj);
+        }
+        console.log("final check: origin ", this.origin, " waypoints, ", this.waypts, " destination: ",this.destinations[this.fastest[0][this.fastest.length-1]] )
+        directionsService.route({
+          origin: this.origin.toString(),
+          destination: this.origin.toString(),
+          waypoints: this.waypts,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+  
       this.loader.dismiss();
       }
 
@@ -128,7 +162,7 @@ export class MapPage {
         waypoints+=item.latLng;
         waypoints+='+to:';
       }
-    LaunchNavigator.navigate(waypoints+this.destinations[this.fastest[0][this.fastest[0].length-1]].latLng.toString(), {start: this.origin.toString()})
+    LaunchNavigator.navigate(waypoints+this.origin.toString(), {start: this.origin.toString()})
         .then(
 
     );

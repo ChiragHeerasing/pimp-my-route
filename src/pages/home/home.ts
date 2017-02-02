@@ -40,6 +40,7 @@ export class HomePage {
   oLng: any;
   locationsPermutations: any;
   travelTimes: any;
+  roundtrip: boolean = false;
 
   constructor(private ref: ChangeDetectorRef,
     public http: Http,
@@ -255,14 +256,17 @@ export class HomePage {
       this.presentAlert();
     } else {
       this.getJson(originLatLng);
-      for(var i of this.locationsPermutations){
-        i.unshift(0);
+      for(var j in this.locationsPermutations){
+        this.locationsPermutations[j].unshift(0)
+        console.log(this.locationsPermutations[j])
       }
+
       let data = {
         origin: [originLatLng],
         destination: this.addressDestinations,
         permutations: this.locationsPermutations,
-        travelTimes: this.travelTimes
+        travelTimes: this.travelTimes,
+        roundTrip: this.roundtrip
       }
       console.log("passing data:", data)
       this.navCtrl.push(MapPage, data);
