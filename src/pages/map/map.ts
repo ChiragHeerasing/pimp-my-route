@@ -19,12 +19,10 @@ export class MapPage {
     directionsService: any;
     directionsDisplay: any;
     origin:any;
-    allPossibilities:any[] = [];
-    allPossibilitiesLocations:any[] = [];
-    // Array of Distances
-    // allPossibilities = [[15658, 15990],[842, 15912]];
-    // Array of travel order possibilities (latLng each index)
-    // allPossibilitiesLocations = [['Portland','Medford','Vancouver'],['Portland','Vancouver','Medford']];
+    permutations:any[] = [];
+    travelTime:any[] = [];
+    destinations:any;
+
 
     loader = this.loadingController.create({
         content: 'Finding best routes...',
@@ -36,9 +34,11 @@ export class MapPage {
       this.origin = this.navParams.data.origin[0].latLng
       this.destA = this.navParams.data.destination[this.navParams.data.destination.length-1];
       this.waypointsSent = this.navParams.data.destination.slice(0, -1);
-      this.allPossibilities = this.navParams.data.travelTimes;
-      this.allPossibilitiesLocations = this.navParams.data.permutations;
-      console.log("poss ", this.allPossibilities, " possloc ", this.allPossibilitiesLocations);
+
+      this.destinations = this.navParams.data.destination;
+      this.travelTime = this.navParams.data.travelTimes;
+      this.permutations = this.navParams.data.permutations;
+      console.log("travelTime ", this.travelTime, " permutations ", this.permutations);
 
     }
 
@@ -68,25 +68,48 @@ export class MapPage {
         console.log(err);
       });
 
+        
       })
 
 
     }
+  fastest: any[] = [];
+  getFastestRoute(){
+    let time1: number = 0;
+    let time2: number = 99999999;
+    for(var x = 0; x<(this.permutations.length); x++){
+      for(var y = 0; y<this.permutations[x].length-1; y++){
+        time1+=this.travelTime[this.permutations[x][y]][this.permutations[x][y+1]];
+      }
+      if (time1<time2){
+        time2 = time1;
+        this.fastest[0]=(this.permutations[x])
+      }
+      //  console.log("---", "time1:", time1, " time2: ",time2, " fastest: ",this.fastest)
+      time1 = 0;
+    }
+    time2 = 999999;
+  }
+ waypts = [];
    calculateAndDisplayRoute(directionsService, directionsDisplay) {
-     var waypts = [];
-
-    for (var i = 0; i < this.waypointsSent.length; i++) {
+    this.getFastestRoute()
+     this.waypts = [];
+     this.fastest[0].shift()
+     this.fastest[0]= this.fastest[0].map(x=>x-1);
+    //  console.log("check here", this.waypointsSent, this.destinations, this.fastest[0])
+    for (var i = 0; i < this.destinations.length-1; i++) {
+      // console.log("fastest:",this.fastest, this.fastest[0][i])
       var tempObj= {
-       location: this.waypointsSent[i].latLng,
+       location: this.destinations[this.fastest[0][i]].latLng,
        stopover: true
       };
-      waypts.push(tempObj);
+      this.waypts.push(tempObj);
     }
-
+      // console.log("final check: origin ", this.origin, " waypoints, ", waypts, " destination: ",this.destinations[this.fastest[0][this.fastest.length-1]] )
       directionsService.route({
         origin: this.origin.toString(),
-        destination: this.destA.latLng.toString(),
-        waypoints: waypts,
+        destination: this.destinations[this.fastest[0][this.fastest[0].length-1]].latLng.toString(),
+        waypoints: this.waypts,
         travelMode: 'DRIVING'
       }, function(response, status) {
         if (status === 'OK') {
@@ -96,67 +119,19 @@ export class MapPage {
         }
       });
       this.loader.dismiss();
-      this.fastRouteAlgorithm(this.allPossibilities);
       }
 
 
   navigate(){
     let waypoints= ''
-      for( var item of this.waypointsSent){
+      for( var item of this.waypts){
         waypoints+=item.latLng;
         waypoints+='+to:';
       }
-    LaunchNavigator.navigate(waypoints+this.destA.latLng.toString(), {start: this.origin.toString()})
+    LaunchNavigator.navigate(waypoints+this.destinations[this.fastest[0][this.fastest[0].length-1]].latLng.toString(), {start: this.origin.toString()})
         .then(
 
     );
   };
-
-  lowestTime(fastest_time_var, allPosArray) {
-    console.log(fastest_time_var, " and ", allPosArray, " and ", this.allPossibilitiesLocations);
-    console.log("FUCK ME TO TEARS", allPosArray.indexOf(fastest_time_var));
-    var theIndex = allPosArray.indexOf(fastest_time_var);
-    return this.allPossibilitiesLocations[theIndex];
-  };
-
-  fastRouteAlgorithm(allPossibilities){
-
-    let allTimes = [];
-    let total_result = 0;
-    let fastest_time = 0;
-
-
-
-      allPossibilities.forEach((innerArray, i) => {
-      total_result = 0;
-      
-      innerArray.forEach((time_to, i2) => {
-        console.log("math happening", total_result);
-        total_result += time_to;
-
-      if(i === 0){
-        fastest_time = total_result
-      } else if( i !== 0 && (innerArray.length -1) === i2) {
-        if(total_result < fastest_time){
-          fastest_time = total_result
-        };
-      };
-
-      if(total_result > fastest_time || total_result === 0){
-        // console.log("break");
-        // console.log("being pushed", i);
-        // console.log(total_result);
-        allTimes.push(9999999);
-      } else if((innerArray.length -1) === i2){
-        // console.log("being pushed", i, " ", total_result);
-        allTimes.push(total_result);
-      };
-      // console.log(fastest_time, " total " + total_result);
-     });
-    });
-    console.log(fastest_time, allTimes);
-    console.log("Diego joto", this.lowestTime(fastest_time, allTimes));
-  }
-
 
 }
