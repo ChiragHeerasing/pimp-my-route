@@ -218,15 +218,15 @@ export class HomePage {
 
 
   getJson(originLatLng){
-    let travelTimes = new Array(100);
+    let travelTimes: any[] = [];
     let baseUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=';
     let latlngs = originLatLng+"|";
     let unixTime = Math.floor(Date.now()/1000).toString();
     let key = googleMapsKey;
-    let addressArray: string[] = []
+    let addressArray: any[] = []
     console.log("origin", this.addressDestinations)
     for (var i in this.addressDestinations){
-      addressArray.push(i);
+      addressArray.push(parseInt(i)+1);
       latlngs+=this.addressDestinations[i].latLng;
       latlngs+="|"
     }
@@ -260,7 +260,7 @@ export class HomePage {
         origin: [originLatLng],
         destination: this.addressDestinations,
         permutations: this.locationsPermutations,
-        travelTimes: this.travelTimes 
+        travelTimes: this.travelTimes
       }
       console.log("passing data:", data)
       this.navCtrl.push(MapPage, data);

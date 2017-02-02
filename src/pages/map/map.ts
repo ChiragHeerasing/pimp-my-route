@@ -39,7 +39,7 @@ export class MapPage {
       this.allPossibilities = this.navParams.data.travelTimes;
       this.allPossibilitiesLocations = this.navParams.data.permutations;
       console.log("poss ", this.allPossibilities, " possloc ", this.allPossibilitiesLocations);
-      this.fastRouteAlgorithm();
+
     }
 
     ionViewDidLoad(){
@@ -96,6 +96,7 @@ export class MapPage {
         }
       });
       this.loader.dismiss();
+      this.fastRouteAlgorithm(this.allPossibilities);
       }
 
 
@@ -113,18 +114,23 @@ export class MapPage {
 
   lowestTime(fastest_time_var, allPosArray) {
     console.log(fastest_time_var, " and ", allPosArray, " and ", this.allPossibilitiesLocations);
-    return this.allPossibilitiesLocations[allPosArray.indexOf(fastest_time_var)];
+    console.log("FUCK ME TO TEARS", allPosArray.indexOf(fastest_time_var));
+    var theIndex = allPosArray.indexOf(fastest_time_var);
+    return this.allPossibilitiesLocations[theIndex];
   };
 
-  fastRouteAlgorithm(){
+  fastRouteAlgorithm(allPossibilities){
 
     let allTimes = [];
     let total_result = 0;
     let fastest_time = 0;
-    this.allPossibilities.forEach((innerArray, i) => {
-      console.log("inner: ", innerArray);
+
+
+
+      allPossibilities.forEach((innerArray, i) => {
       total_result = 0;
       innerArray.forEach((time_to, i2) => {
+        console.log("math happening", total_result);
         total_result += time_to;
 
       if(i === 0){
@@ -135,15 +141,19 @@ export class MapPage {
         };
       };
 
-      if(total_result > fastest_time){
-        console.log("break");
+      if(total_result > fastest_time || total_result === 0){
+        // console.log("break");
+        // console.log("being pushed", i);
+        // console.log(total_result);
         allTimes.push(9999999);
       } else if((innerArray.length -1) === i2){
+        // console.log("being pushed", i, " ", total_result);
         allTimes.push(total_result);
       };
-      console.log(fastest_time, " total " + total_result);
+      // console.log(fastest_time, " total " + total_result);
      });
     });
+    console.log(fastest_time, allTimes);
     console.log("Diego joto", this.lowestTime(fastest_time, allTimes));
   }
 
