@@ -39,6 +39,7 @@ export class HomePage {
   oLat: any;
   oLng: any;
   locationsPermutations: any;
+  travelTimes: any;
 
   constructor(private ref: ChangeDetectorRef,
     public http: Http,
@@ -217,15 +218,15 @@ export class HomePage {
 
 
   getJson(originLatLng){
-    let travelTimes = new Array(100);
+    let travelTimes: any[] = [];
     let baseUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins=';
     let latlngs = originLatLng+"|";
     let unixTime = Math.floor(Date.now()/1000).toString();
     let key = googleMapsKey;
-    let addressArray: string[] = []
+    let addressArray: any[] = []
     console.log("origin", this.addressDestinations)
     for (var i in this.addressDestinations){
-      addressArray.push(i);
+      addressArray.push(parseInt(i)+1);
       latlngs+=this.addressDestinations[i].latLng;
       latlngs+="|"
     }
@@ -241,25 +242,28 @@ export class HomePage {
           }
         }
         });
-        console.log(travelTimes);
-        console.log("permu",addressArray," ", this.permutator(addressArray));  
-        // this.locationsPermutations = this.permutator(addressArray)
-
-
-
+        // console.log(travelTimes);
+        // console.log("permu",addressArray," ", this.permutator(addressArray));
+        this.locationsPermutations = this.permutator(addressArray)
+        this.travelTimes = travelTimes;
   }
 
   getRoutes($event) {
-    let originLatLng= "";    
-    (Object.keys(this.startAddress).length == 0) ? originLatLng=`${this.oLat},${this.oLng}` : originLatLng=this.startAddress.latLng ; 
+    let originLatLng= "";
+    (Object.keys(this.startAddress).length == 0) ? originLatLng=`${this.oLat},${this.oLng}` : originLatLng=this.startAddress.latLng ;
     if (this.addressDestinations.length === 0) {
       this.presentAlert();
     } else {
+      this.getJson(originLatLng);
+      for(var i of this.locationsPermutations){
+        i.unshift(0);
+      }
       let data = {
         origin: [originLatLng],
-        destination: this.addressDestinations
+        destination: this.addressDestinations,
+        permutations: this.locationsPermutations,
+        travelTimes: this.travelTimes
       }
-      this.getJson(originLatLng);
       console.log("passing data:", data)
       this.navCtrl.push(MapPage, data);
     }
