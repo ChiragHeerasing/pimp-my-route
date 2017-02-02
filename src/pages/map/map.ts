@@ -129,6 +129,7 @@ export class MapPage {
 
       allPossibilities.forEach((innerArray, i) => {
       total_result = 0;
+      
       innerArray.forEach((time_to, i2) => {
         console.log("math happening", total_result);
         total_result += time_to;
