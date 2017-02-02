@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ViewController, NavController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 
@@ -15,7 +15,7 @@ export class ModalAutocompleteItems implements OnInit{
     acService:any;
     placesService: any;
 
-    constructor(public viewCtrl: ViewController, private nav: NavController) {
+    constructor(private ref: ChangeDetectorRef,public viewCtrl: ViewController, private nav: NavController) {
     }
 
     ngOnInit() {
@@ -52,10 +52,11 @@ export class ModalAutocompleteItems implements OnInit{
             componentRestrictions: { country: 'US' }
         }
         this.acService.getPlacePredictions(config, function (predictions, status) {
-            console.log('modal > getPlacePredictions > status > ', status);
+            // console.log('modal > getPlacePredictions > status > ', status);
             self.autocompleteItems = [];
             predictions.forEach(function (prediction) {
                 self.autocompleteItems.push(prediction);
+                self.ref.detectChanges()
             });
         });
     }
