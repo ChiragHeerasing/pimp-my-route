@@ -239,7 +239,7 @@ export class HomePage {
         for (var x in data.rows) {
           travelTimes[x] = new Array(data.rows);
           for (var y in data.rows[x].elements){
-              travelTimes[x][y] = data.rows[x].elements[y].duration_in_traffic.value;
+              travelTimes[x][y] = data.rows[x].elements[y].duration.value;
           }
         }
         });

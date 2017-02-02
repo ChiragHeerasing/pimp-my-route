@@ -4,7 +4,6 @@ import { Geolocation } from 'ionic-native';
 import { LaunchNavigator, LaunchNavigatorOptions } from 'ionic-native';
 
 declare var google;
-var StopIteration: any = "hi";
 
 @Component({
   selector: 'page-map',
