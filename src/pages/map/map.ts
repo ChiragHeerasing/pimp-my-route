@@ -101,8 +101,9 @@ export class MapPage {
     );
   };
 
-
+// Array of Distances
 allPossibilities = [[15658, 15990],[842, 15912]];
+// Array of travel order possibilities (latLng each index)
 allPossibilitiesEng = [['Portland','Medford','Vancouver'],['Portland','Vancouver','Medford']];
 
   yo(){
